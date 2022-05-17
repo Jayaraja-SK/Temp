@@ -21,14 +21,23 @@ const connection = mysql.createConnection({
     database: "hostel"
 });
 
+
+var loginController = require("./Controller/login.controller");
+
+loginController.addAdmin();
+
 connection.connect((err) => {
     if(err) throw err;
-    console.log("CONNECTED TO MYSQL SERVER");
+    console.log("CONNECTED TO MYSQL SERVER\n");
+
 })
 
 app.get("/",function(request,response){
     response.send("Hello World!")
 });
+
+
+app.post("/warden/add_user",cors(),loginController.addUser);
 
 
 app.post("/login",cors(),function(request,response){
@@ -38,7 +47,9 @@ app.post("/login",cors(),function(request,response){
 
     response.send(request.body);*/
 
-    var dml = "select email,password from login where email = \'" + request.body.email+ "\'";
+    console.log(request.body);
+
+    var dml = "select email,password from users where email = \'" + request.body.email+ "\'";
 
     connection.query(dml,function(err,result,field) {
         if(err) throw err;
@@ -60,5 +71,5 @@ app.post("/login",cors(),function(request,response){
 
 
 app.listen(8080, function () {
-    console.log("APPLICATION STARTED ON PORT %d",8080)
+    console.log("APPLICATION STARTED ON PORT %d\n",8080)
 });

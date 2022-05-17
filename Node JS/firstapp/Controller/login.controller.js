@@ -5,10 +5,9 @@ exports.addAdmin = async function () {
     userService.addAdmin();
 }
 
-exports.addUser = function (data) {
-    var val = userService.addUser(data);
+exports.addUser = function (request,response,next) {
+    userService.addUser(request.body, function(result){
+        response.send(result);
+    });
 
-    console.log(val);
-
-    return val;
 }

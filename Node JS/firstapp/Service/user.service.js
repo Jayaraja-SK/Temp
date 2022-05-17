@@ -49,34 +49,23 @@ exports.addAdmin = async function () {
 }
 
 
-exports.addUser = function (data) {
-    console.log(data);
-    console.log(data.email);
-
-    let val;
-
-    connection.connect((err) => {
-        console.log("CONNECTED");
-        
-    });
-
+exports.addUser = function (data,callback) {
     var dml = "select email from users where email = \'"+data.email+"\'";
 
-    connection.query(dml,function(err,result,field) {
-        if(err) throw err;
+    var val;
 
-        console.log(result);
-        
+    connection.query(dml,function(err,result,field) {
         if(result.length==0)
         {
-            return "NOT EXISTS";
+            return callback(true);
 
         }
         else
         {
-            return "EXISTS";
+            return callback(false);
         }
 
         
     });
+
 }
