@@ -17,9 +17,11 @@ drop table campus;
 # REM "USERS TABLE"
 
 create table users(
-    email varchar(50) PRIMARY KEY,
+    user_id int PRIMARY KEY AUTO_INCREMENT,
+    email varchar(50) UNIQUE,
     name varchar(50),
-    role varchar(20) CHECK (role in ('ROLE_WARDEN','ROLE_STUDENT','ROLE_MESSINCHARGE')),
+    contact_no int(10),
+    role varchar(20) CHECK (role in ('ROLE_WARDEN','ROLE_STUDENT','ROLE_MESS')),
     password varchar(255)
 );
 
@@ -38,52 +40,48 @@ create table courses(
     degree varchar(10),
     course_name varchar(20),
     no_of_years int,
-    FOREIGN KEY (campus_id) REFERENCES campus(campus_id)
+    FOREIGN KEY (campus_id) REFERENCES campus(campus_id) ON DELETE CASCADE
 );
+
+
+insert into campus(campus_name,campus_loc) values("SSN","CHENNAI");
+insert into courses(campus_id,degree,course_name,no_of_years) values(1,'BE','CSE',4);
 
 
 
 # REM "STUDENTS"
 
 create table students(
-    student_id int PRIMARY KEY AUTO_INCREMENT,
-    email varchar(50),
-    name varchar(50),
+    student_id int PRIMARY KEY,
     dob date,
     gender char(1) CHECK (gender in ('M','F')),
-    contact_no int(10),
     campus_id int,
     course_id int,
     batch int,
     room_no varchar(5),
-    FOREIGN KEY (email) REFERENCES users(email),
-    FOREIGN KEY (campus_id) REFERENCES campus(campus_id),
-    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+    FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (campus_id) REFERENCES campus(campus_id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE
 );
 
 
 # REM "WARDEN"
 
 create table wardens(
-    warden_id int PRIMARY KEY AUTO_INCREMENT,  
-    email varchar(50),
-    name varchar(50),
-    contact_no int(10),
+    warden_id int PRIMARY KEY,  
     dob date,
     doj date,
-    FOREIGN KEY (email) REFERENCES users(email)
+    FOREIGN KEY (warden_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 
 # REM "MESS"
 
 create table mess(
-    mess_id int PRIMARY KEY AUTO_INCREMENT,
-    email varchar(50),
-    name varchar(50),
-    contact_no int(10),
+    mess_id int PRIMARY KEY,
     company_name varchar(50),
-    FOREIGN KEY (email) REFERENCES users(email)
+    company_loc varchar(50),
+    FOREIGN KEY (mess_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 
@@ -92,11 +90,9 @@ create table mess(
 create table warden_students(
     warden_id int,
     campus_id int,
-    course_id int,
     batch int,
-    FOREIGN KEY (warden_id) REFERENCES wardens(warden_id),
-    FOREIGN KEY (campus_id) REFERENCES campus(campus_id),
-    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+    FOREIGN KEY (warden_id) REFERENCES wardens(warden_id) ON DELETE CASCADE,
+    FOREIGN KEY (campus_id) REFERENCES campus(campus_id) ON DELETE CASCADE
 );
 
 
@@ -105,11 +101,9 @@ create table warden_students(
 create table mess_students(
     mess_id int,
     campus_id int,
-    course_id int,
     batch int,
-    FOREIGN KEY (mess_id) REFERENCES mess(mess_id),
-    FOREIGN KEY (campus_id) REFERENCES campus(campus_id),
-    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+    FOREIGN KEY (mess_id) REFERENCES mess(mess_id) ON DELETE CASCADE,
+    FOREIGN KEY (campus_id) REFERENCES campus(campus_id) ON DELETE CASCADE
 );
 
 
@@ -123,7 +117,7 @@ create table leave_form_request(
     to_date date,
     reason varchar(50),
     status varchar(20) CHECK (status in ('NOT_VIEWED','ACCEPTED','REJECTED')),
-    FOREIGN KEY (student_id) REFERENCES students(student_id)
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 
 
@@ -136,7 +130,7 @@ create table complaint_reg(
     complaint_type varchar(20) CHECK (complaint_type in ('ELECTRICAL','FURNITURE','PLUMBING','WIFI')),
     complaint varchar(100),
     status varchar(20) CHECK (status in ('RESOLVED','NOT_RESOLVED')),
-    FOREIGN KEY (student_id) REFERENCES students(student_id)
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 
 
@@ -149,8 +143,8 @@ create table mess_bill_cancellation(
     from_date date,
     to_date date,
     status int(1) CHECK (status in (0,1)),
-    FOREIGN KEY (student_id) REFERENCES students(student_id),
-    FOREIGN KEY (mess_id) REFERENCES mess(mess_id)
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (mess_id) REFERENCES mess(mess_id) ON DELETE CASCADE
 );
 
 
@@ -162,6 +156,7 @@ create table mess_bill_payment(
     bill_month int,
     bill_year int,
     status varchar(20) CHECK(status in ('PAID','UNPAID','FAILED')),
-    FOREIGN KEY (student_id) REFERENCES students(student_id),
-    FOREIGN KEY (mess_id) REFERENCES mess(mess_id)
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (mess_id) REFERENCES mess(mess_id) ON DELETE CASCADE
 );
+

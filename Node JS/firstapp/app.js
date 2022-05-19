@@ -22,31 +22,45 @@ const connection = mysql.createConnection({
 });
 
 
-var loginController = require("./Controller/login.controller");
-
-loginController.addAdmin();
-
 connection.connect((err) => {
     if(err) throw err;
     console.log("CONNECTED TO MYSQL SERVER\n");
 
 })
 
+
+
+var wardenController = require("./Controller/warden.controller");
+
+wardenController.addAdmin();
+
+
+
+var student = require("./Routes/student.routes");
+
+var warden = require("./Routes/warden.routes");
+
+var mess = require("./Routes/mess.routes");
+
+
+
 app.get("/",function(request,response){
     response.send("Hello World!")
 });
 
 
-app.post("/warden/add_user",cors(),loginController.addUser);
+
+
+app.use("/warden",warden);
+
+app.use("/student",student);
+
+app.use("/mess",mess);
+
+
 
 
 app.post("/login",cors(),function(request,response){
-    /*var dml = "insert into login values (?)";
-
-    connection.query(dml,[[request.body.email,request.body.password]]);
-
-    response.send(request.body);*/
-
     console.log(request.body);
 
     var dml = "select email,password from users where email = \'" + request.body.email+ "\'";
