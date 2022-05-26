@@ -1,3 +1,4 @@
+const req = require('express/lib/request');
 const res = require('express/lib/response');
 var wardenService = require('../Service/warden.service');
 
@@ -53,6 +54,51 @@ exports.editWarden = function (request,response) {
 }
 
 
+exports.getStudents = function (request,response) {
+    wardenService.getStudents(request.params.campus_id, request.params.course_id, request.params.batch, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.getStudentInfoByEmail = function (request,response) {
+    wardenService.getStudentInfoByEmail(request.params.email, function(result){
+        response.send(result);
+
+    });
+
+}
+
+exports.getBatches = function (request,response) {
+    wardenService.getBatches(request.params.campus_id, request.params.course_id, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.deleteStudents = function (request,response) {
+    wardenService.deleteStudents(request.params.campus_id, request.params.course_id, request.params.batch, function(result){
+        response.send("");
+
+    });
+
+}
+
+
+exports.deleteStudentsByCampusBatch = function (request,response) {
+    wardenService.deleteStudentsByCampusBatch(request.params.campus_id, request.params.batch, function(result){
+        response.send("");
+
+    });
+
+}
+
+
+
 exports.getWardens = function (request,response) {
     wardenService.getWardens(function(result){
         response.send(result);
@@ -105,7 +151,7 @@ exports.editUser = function (request,response) {
 
 exports.editPassword = function (request,response) {
     wardenService.editPassword(request.body, request.params.user_id, function(result){
-        response.send(result);
+        response.send("");
     });
 
 }
@@ -176,7 +222,7 @@ exports.deleteCourse = function (request,response) {
 }
 
 
-exports.getCampusDetails = function (request,response) {
+/*exports.getCampusDetails = function (request,response) {
     wardenService.getCampusDetails(function(result){
         var filteredResult = {};
 
@@ -197,13 +243,78 @@ exports.getCampusDetails = function (request,response) {
 
     });
 
-}
+}*/
 
 
-/*exports.getCourses = function (request,response) {
-    wardenService.getCourses(request.params.campus_id, function(result){
+exports.getAllCampus = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+    wardenService.getAllCampus(function(result){
         response.send(result);
 
     });
 
-}*/
+}
+
+
+exports.getCoursesByCampus = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+    wardenService.getCoursesByCampus(request.params.campus_id, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.addWardenStudentRel = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+    wardenService.addWardenStudentRel(request.body, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.deleteWardenStudentRel = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+    wardenService.deleteWardenStudentRel(request.body.warden_id,request.params.campus_id,request.params.batch, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+
+exports.getLeaveForms = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+    wardenService.getLeaveForms(request.body.warden_id, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.getLeaveFormsByDateStatus = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+    wardenService.getLeaveFormsByDateStatus(request.body.warden_id, request.params.status, request.params.from_date, request.params.to_date, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+
+exports.changeLeaveFormStatus = function (request,response) {
+    wardenService.changeLeaveFormStatus(request.body.request_id, request.params.status, function(result){
+        response.send("");
+
+    });
+
+}
+
+
+exports.getLeaveFormsByStudentId = function (request,response) {
+    wardenService.getLeaveFormsByStudentId(request.body.warden_id, request.params.student_id,function(result){
+        response.send(result);
+
+    });
+
+}

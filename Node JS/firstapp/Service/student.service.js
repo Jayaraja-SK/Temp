@@ -27,3 +27,40 @@ exports.addLeaveForm = function (data,callback) {
     });
 
 }
+
+exports.getStudentDetails = function (email,callback) {
+    var dml = `select
+    users.email, users.name, users.contact_no, students.gender, campus.campus_name, courses.course_name, students.batch
+    from
+    users, students, courses, campus
+    where
+    users.user_id=students.student_id
+    and
+    users.email='${email}'
+    and 
+    courses.campus_id=campus.campus_id
+    and
+    students.campus_id=campus.campus_id
+    and
+    students.course_id=courses.course_id`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.getLeaveForms = function (student_id,callback) {
+    var dml = `select request_id, request_date, from_date, to_date, reason, status from leave_form_request where student_id=${student_id} order by request_date DESC`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+

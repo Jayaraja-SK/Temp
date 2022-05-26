@@ -4,7 +4,7 @@
     "email":"admin@ssn1",
     "name":"Jack",
     "contact_no":1234567890,
-    "role":"ROLE_STUDENT",
+    "role":"STUDENT",
     "password":"11",
     "dob":"2000-10-01",
     "gender":"M",
@@ -21,7 +21,7 @@
     "email":"admin@ssn5",
     "name":"Jack",
     "contact_no":1234567890,
-    "role":"ROLE_WARDEN",
+    "role":"WARDEN",
     "password":"11",
     "dob":"1980-10-01",
     "doj":"2010-10-01"
@@ -34,7 +34,7 @@
     "email":"admin@ssn40",
     "name":"Jack",
     "contact_no":1234567890,
-    "role":"ROLE_MESS",
+    "role":"MESS",
     "password":"11",
     "company_name":"ABC Catering",
     "company_loc":"Adyar"
@@ -90,4 +90,13 @@
     "from_date":"2022-01-03",
     "to_date":"2022-01-10",
     "reason":"Home"
+}
+
+
+# WARDEN STUDENT REL
+
+{
+    "warden_id": 6,
+    "campus_id": 1,
+    "batch": 2019
 }

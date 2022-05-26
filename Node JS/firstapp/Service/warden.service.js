@@ -3,6 +3,7 @@ const app = express();
 const mysql = require("mysql");
 const cors = require('cors');
 const req = require("express/lib/request");
+const bcrypt = require("bcryptjs");
 
 app.use(express.json());
 
@@ -28,8 +29,10 @@ exports.addAdmin = async function () {
             if(result.length==0)
             {
                 console.log("ADMIN DOES NOT EXIST...\n");
+
+                const password = bcrypt.hashSync("admin", 10);
     
-                dml = "insert into users(email,name,role,password) values('admin@ssn','ADMIN','ROLE_WARDEN','admin')";
+                dml = `insert into users(email,name,role,password) values('admin@ssn','ADMIN','WARDEN','${password}')`;
     
                 connection.query(dml,function(err,result,field) {
                     if(err) throw err; 
@@ -57,12 +60,14 @@ exports.addAdmin = async function () {
 exports.addUser = function (data,callback) {
     var dml = `select email from users where email = '${data.email}'`
 
+    const password = bcrypt.hashSync(data.password,10);
+
     connection.query(dml,function(err,result,field) {
         if(err) throw err;
 
         if(result.length==0)
         {
-            dml=`insert into users(email,name,contact_no,role,password) values('${data.email}','${data.name}','${data.contact_no}','${data.role}','${data.password}')`;
+            dml=`insert into users(email,name,contact_no,role,password) values('${data.email}','${data.name}','${data.contact_no}','${data.role}','${password}')`;
 
             connection.query(dml,function(err,result) {
                 if(err) throw err;
@@ -135,14 +140,16 @@ exports.editUser = function (data,user_id,callback) {
 
 
 exports.editPassword = function (data,user_id,callback) {
+    const password = bcrypt.hashSync(data.password, 10);
+    
     var dml = `update users
-    set password='${data.new_password}'
+    set password='${password}'
     where user_id=${user_id}`;
 
     connection.query(dml,function(err,result) {
         if(err) throw err;
 
-        return callback(true);
+        return callback();
     });
 
 }
@@ -178,6 +185,131 @@ exports.editStudent = function (data,student_id,callback) {
         if(err) throw err;
 
         return callback();
+    });
+
+}
+
+
+
+
+exports.getStudents = function (campus_id, course_id, batch, callback) {
+    var dml = `select 
+    users.user_id, users.name, users.email, users.contact_no, students.dob, students.gender, students.room_no
+    from users,students
+    where users.user_id=students.student_id
+    and
+    students.campus_id=${campus_id}
+    and
+    students.course_id=${course_id}
+    and
+    students.batch=${batch}`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.getBatches = function (campus_id, course_id, callback) {
+    var dml = `select 
+    distinct(batch)
+    from students
+    where 
+    students.campus_id=${campus_id}
+    and
+    students.course_id=${course_id}`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.deleteStudentsByCampusBatch = function (campus_id, batch, callback) {
+    var dml = `delete
+    from users where
+    users.user_id in (select 
+    students.student_id
+    from students
+    where 
+    students.campus_id=${campus_id}
+    and
+    students.batch=${batch})`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback();
+    });
+
+}
+
+
+exports.deleteStudents = function (campus_id, course_id, batch, callback) {
+    var dml = `delete
+    from users where
+    users.user_id in (select 
+    students.student_id
+    from students
+    where 
+    students.campus_id=${campus_id}
+    and
+    students.course_id=${course_id}
+    and
+    students.batch=${batch})`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback();
+    });
+
+}
+
+exports.deleteStudentsByCampus = function (campus_id, course_id, batch, callback) {
+    var dml = `delete
+    from users where
+    users.user_id in (select 
+    students.student_id
+    from students
+    where 
+    students.campus_id=${campus_id}
+    and
+    students.course_id=${course_id}
+    and
+    students.batch=${batch})`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback();
+    });
+
+}
+
+
+exports.getStudentInfoByEmail = function (email, callback) {
+    var dml = `select 
+    users.user_id, users.name, users.email, users.contact_no, students.dob, students.gender, campus.campus_name, courses.course_name, students.room_no
+    from users,students,campus,courses
+    where users.user_id=students.student_id
+    and
+    users.email='${email}'
+    and
+    campus.campus_id=students.campus_id
+    and
+    courses.course_id=students.course_id`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
     });
 
 }
@@ -226,7 +358,7 @@ exports.getWardens = function (callback) {
     connection.query(dml,function(err,result,field) {
         if(err) throw err;
 
-        return callback(JSON.stringify(result));
+        return callback(result);
     });
 
 }
@@ -241,7 +373,7 @@ exports.getMessDetails = function (callback) {
     connection.query(dml,function(err,result,field) {
         if(err) throw err;
 
-        return callback(JSON.stringify(result));
+        return callback(result);
     });
 
 }
@@ -334,12 +466,38 @@ exports.deleteCampus = function (campus_id,callback) {
 }
 
 
-exports.getCampusDetails = function (callback) {
+/*exports.getCampusDetails = function (callback) {
     var dml = `select 
     campus.campus_id,campus.campus_name,campus.campus_loc,courses.course_id,courses.degree,courses.course_name,courses.no_of_years
     from campus,courses
     where
     campus.campus_id=courses.campus_id`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}*/
+
+
+exports.getAllCampus = function (callback) {
+    var dml = `select 
+    campus.campus_id,campus.campus_name,campus.campus_loc
+    from campus`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.getCoursesByCampus = function (campus_id, callback) {
+    var dml = `select * from courses where campus_id=${campus_id}`;
 
     connection.query(dml,function(err,result,field) {
         if(err) throw err;
@@ -385,6 +543,186 @@ exports.deleteCourse = function (course_id,callback) {
         if(err) throw err;
 
         return callback();
+    });
+
+}
+
+
+
+exports.getLeaveForms = function (warden_id, callback) {
+    var dml = `select 
+        leave_form_request.request_id, leave_form_request.student_id, users.name, users.contact_no, campus.campus_name, courses.course_name, students.batch, leave_form_request.request_date, leave_form_request.from_date, leave_form_request.to_date, leave_form_request.reason, leave_form_request.status
+    from 
+        leave_form_request, wardens, students, warden_students, users, campus, courses
+    where
+        leave_form_request.student_id=students.student_id
+        and
+        warden_students.campus_id=students.campus_id
+        and
+        warden_students.batch=students.batch
+        and
+        warden_students.warden_id=wardens.warden_id
+        and
+        users.user_id=students.student_id
+        and 
+        students.campus_id=campus.campus_id
+        and
+        students.course_id=courses.course_id
+        and
+        leave_form_request.status='NOT_VIEWED'
+        and
+        wardens.warden_id=${warden_id}
+    order by
+        leave_form_request.request_date DESC`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.getLeaveFormsByStudentId = function (warden_id, student_id, callback) {
+    var dml = `select 
+        leave_form_request.request_id, leave_form_request.student_id, users.name, users.contact_no, campus.campus_name, courses.course_name, students.batch, leave_form_request.request_date, leave_form_request.from_date, leave_form_request.to_date, leave_form_request.reason, leave_form_request.status
+    from 
+        leave_form_request, wardens, students, warden_students, users, campus, courses
+    where
+        leave_form_request.student_id=students.student_id
+        and
+        warden_students.campus_id=students.campus_id
+        and
+        warden_students.batch=students.batch
+        and
+        warden_students.warden_id=wardens.warden_id
+        and
+        users.user_id=students.student_id
+        and 
+        students.campus_id=campus.campus_id
+        and
+        students.course_id=courses.course_id
+        and
+        leave_form_request.status='NOT_VIEWED'
+        and
+        wardens.warden_id=${warden_id}
+        and
+        students.student_id=${student_id}
+    order by
+        leave_form_request.request_date DESC`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.getLeaveFormsByDateStatus = function (warden_id, status, from_date, to_date, callback) {
+    var dml = `select 
+        leave_form_request.request_id, leave_form_request.student_id, users.name, users.contact_no, campus.campus_name, courses.course_name, students.batch, leave_form_request.request_date, leave_form_request.from_date, leave_form_request.to_date, leave_form_request.reason, leave_form_request.status
+    from 
+        leave_form_request, wardens, students, warden_students, users, campus, courses
+    where
+        leave_form_request.student_id=students.student_id
+        and
+        warden_students.campus_id=students.campus_id
+        and
+        warden_students.batch=students.batch
+        and
+        warden_students.warden_id=wardens.warden_id
+        and
+        users.user_id=students.student_id
+        and 
+        students.campus_id=campus.campus_id
+        and
+        students.course_id=courses.course_id
+        and
+        leave_form_request.status='${status}'
+        and
+        wardens.warden_id=${warden_id}
+        and
+        leave_form_request.request_date>='${from_date}'
+        and
+        leave_form_request.request_date<='${to_date}'
+    order by
+        leave_form_request.request_date DESC`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.changeLeaveFormStatus = function (request_id, status, callback) {
+    var dml = `update leave_form_request
+    set status='${status}'
+    where request_id=${request_id}`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+
+exports.addWardenStudentRel = function (data,callback) {
+    var dml = `select * from warden_students where warden_id=${data.warden_id} and campus_id=${data.campus_id} and batch=${data.batch}`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        if(result.length==0)
+        {
+            dml = `insert into warden_students values(${data.warden_id},${data.campus_id},${data.batch})`;
+
+            connection.query(dml,function(err,result) {
+                if(err) throw err;
+
+                return callback(true);
+
+            });
+        }
+        else
+        {
+            return callback(false);
+        }
+    });
+
+}
+
+
+exports.deleteWardenStudentRel = function (warden_id,campus_id,batch,callback) {
+    var dml = `select * from warden_students where warden_id=${warden_id} and campus_id=${campus_id} and batch=${batch}`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        if(result.length==0)
+        {
+            return callback(false);
+        }
+        else
+        {
+            dml = `delete from warden_students
+            where warden_id=${warden_id} and campus_id=${campus_id} and batch=${batch}`;
+
+            connection.query(dml,function(err,result) {
+                if(err) throw err;
+
+                return callback(true);
+
+            });
+        }
     });
 
 }

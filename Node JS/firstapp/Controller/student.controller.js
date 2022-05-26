@@ -9,3 +9,21 @@ exports.addLeaveForm = function (request,response) {
     });
 
 }
+
+
+exports.getLeaveForms = function (request,response) {
+    studentService.getLeaveForms(request.body.student_id,  function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.getStudentDetails = function (request,response) {
+    studentService.getStudentDetails(request.body.email_id,  function(result){
+        response.send(result);
+
+    });
+
+}

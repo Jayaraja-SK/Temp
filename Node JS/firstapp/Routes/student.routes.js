@@ -11,5 +11,9 @@ var studentController = require("../Controller/student.controller");
 
 router.post("/leave_form",cors(),studentController.addLeaveForm);
 
+router.get("/leave_forms",cors(),studentController.getLeaveForms);
+
+router.get("/personal_details",cors(),studentController.getStudentDetails);
+
 
 module.exports = router;

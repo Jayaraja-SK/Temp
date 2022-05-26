@@ -1,13 +1,12 @@
+const req = require('express/lib/request');
 const res = require('express/lib/response');
-var userService = require('../Service/user.service');
+var loginService = require('../Service/login.service');
 
-exports.addAdmin = async function () {
-    userService.addAdmin();
-}
 
-exports.addUser = function (request,response,next) {
-    userService.addUser(request.body, function(result){
+exports.validateUser = function (request,response) {
+    loginService.validateUser(request.body, function(result){
         response.send(result);
+
     });
 
 }
