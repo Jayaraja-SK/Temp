@@ -104,6 +104,7 @@ const ViewAllComplaints = () => {
                         <th>Campus Name</th>
                         <th>Course Name</th>
                         <th>Batch</th>
+                        <th>Room No.</th>
                         <th>Contact No</th>
                         <th>Complaint Date</th>
                         <th>Complaint Type</th>
@@ -120,6 +121,7 @@ const ViewAllComplaints = () => {
 							<td>{data.campus_name}</td>
                             <td>{data.course_name}</td>
                             <td>{data.batch}</td>
+                            <td>{data.room_no}</td>
 							<td>{data.contact_no}</td>
 							<td>{data.complaint_date}</td>
                             <td>{data.complaint_type}</td>

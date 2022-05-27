@@ -66,8 +66,50 @@ exports.getLeaveForms = function (student_id,callback) {
 
 
 exports.addComplaintReg = function (data,callback) {
+    var complaint_date = new Date(Date.now()).getFullYear() + "-" + (new Date(Date.now()).getMonth() + 1) + "-" + new Date(Date.now()).getDate();
+    
     var dml = `insert into complaint_reg(student_id, complaint_date, complaint_type, complaint, status)
-    values(${data.student_id}, '${data.complaint_date}', '${data.complaint_type}', '${data.complaint}', 'NOT_RESOLVED')`;
+    values(${data.student_id}, '${complaint_date}', '${data.complaint_type}', '${data.complaint}', 'NOT_RESOLVED')`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        return callback();
+    });
+
+}
+
+
+exports.getComplaints = function (student_id,callback) {
+    var dml = `select complaint_id, complaint_date, complaint_type, complaint, status from complaint_reg where student_id=${student_id} order by complaint_date DESC`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.changeComplaintStatus = function (complaint_id,status,callback) {
+    var dml = `update complaint_reg
+    set status='${status}'
+    where complaint_id=${complaint_id}`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        return callback();
+    });
+
+}
+
+
+exports.addBillCancellation = function (data,callback) {
+    var request_date = new Date(Date.now()).getFullYear() + "-" + (new Date(Date.now()).getMonth() + 1) + "-" + new Date(Date.now()).getDate();
+    
+    var dml = `insert into mess_bill_cancellation(student_id,request_date,from_date,to_date,status) values(${data.student_id},'${request_date}','${data.from_date}','${data.to_date}',0)`;
 
     connection.query(dml,function(err,result) {
         if(err) throw err;

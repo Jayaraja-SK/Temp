@@ -8,5 +8,10 @@ var router = express.Router();
 
 var messController = require("../Controller/mess.controller");
 
+router.get("/bill_cancellations/:mess_id/from_date=:from_date&&to_date=:to_date",cors(),messController.getBillCancellations);
+
+router.get("/bill_cancellations_student/:mess_id/:student_id",cors(),messController.getBillCancellationsOfStudent);
+
+router.get("/students_list/:mess_id/campus_id=:campus_id&&course_id=:course_id&&batch=:batch",cors(),messController.getStudentsList);
 
 module.exports = router;

@@ -5,23 +5,25 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from './components/login';
 
+
 import WardenDashboard from "./components/Warden/warden_dashboard";
 
 import {AddCampus, ViewCampus, EditCampus, AddCourse, ViewCourses, EditCourse} from "./components/Warden/campus_courses";
-
 import { AddWarden, AddStudent, AddMess, ViewWardens, EditWarden, EditUser, ViewMess, EditMess, ViewStudents, EditStudent } from './components/Warden/manage_users';
-
 import { AddWardenStudentRel, ViewWardenStudentRel, AddMessStudentRel, ViewMessStudentRel } from "./components/Warden/user_rel"
-
 import { ViewAllLeaveForms, ViewLeaveFormsByFilter } from './components/Warden/leave_form';
-
 import { ViewAllComplaints } from './components/Warden/complaints';
 
 
 import StudentDashboard from "./components/Student/student_dashboard";
 
+import { AddLeaveForms, ViewLeaveFormsStudent } from './components/Student/leave_form';
+import { AddComplaint, ViewComplaintsStudent } from './components/Student/complaints';
+import { AddBillCancellation } from './components/Student/bill_cancellation';
+
 
 import MessDashboard from "./components/Mess/mess_dashboard";
+import { ViewBillCancellationByFilter, ViewStudentBillCancellations, ViewStudentsList } from './components/Mess/bill_cancellation';
 
 
 
@@ -59,11 +61,17 @@ function App() {
         
 
         <Route path="/student_dashboard" element={<StudentDashboard />}>
-
+          <Route path="leave_forms" element={<ViewLeaveFormsStudent />}/>
+          <Route path="add_leave_form" element={<AddLeaveForms />}/>
+          <Route path="add_complaint" element={<AddComplaint />}/>
+          <Route path="view_complaints" element={<ViewComplaintsStudent />}/>
+          <Route path="bill_cancellation" element={<AddBillCancellation />}/>
         </Route>
 
         <Route path="/mess_dashboard" element={<MessDashboard />}>
-
+          <Route path="view_bill_cancellations" element={<ViewBillCancellationByFilter />}/>
+          <Route path="view_students_list" element={<ViewStudentsList />}/>
+          <Route path="student_bill_cancellations" element={<ViewStudentBillCancellations />}/>
         </Route>
 
         

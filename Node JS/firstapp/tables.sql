@@ -138,13 +138,11 @@ create table complaint_reg(
 
 create table mess_bill_cancellation(
     student_id int,
-    mess_id int,
     request_date date,
     from_date date,
     to_date date,
     status int(1) CHECK (status in (0,1)),
-    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-    FOREIGN KEY (mess_id) REFERENCES mess(mess_id) ON DELETE CASCADE
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 
 

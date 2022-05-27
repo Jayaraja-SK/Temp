@@ -825,7 +825,7 @@ exports.deleteMessStudentRel = function (mess_id,campus_id,batch,callback) {
 
 exports.getAllComplaints = function (warden_id, complaint_type, status, from_date, to_date, callback) {
     var dml = `select 
-        complaint_reg.complaint_id, complaint_reg.student_id, users.name, users.contact_no, campus.campus_name, courses.course_name, students.batch, complaint_reg.complaint_date, complaint_reg.complaint_type, complaint_reg.complaint, complaint_reg.status
+        complaint_reg.complaint_id, complaint_reg.student_id, users.name, users.contact_no, campus.campus_name, courses.course_name, students.batch, students.room_no, complaint_reg.complaint_date, complaint_reg.complaint_type, complaint_reg.complaint, complaint_reg.status
     from 
         complaint_reg, wardens, students, warden_students, users, campus, courses
     where
@@ -857,9 +857,7 @@ exports.getAllComplaints = function (warden_id, complaint_type, status, from_dat
 
     connection.query(dml,function(err,result,field) {
         if(err) throw err;
-
-        console.log(result);
-
+        
         return callback(result);
     });
 
