@@ -60,7 +60,16 @@ router.delete("/campus/:campus_id/course/:course_id",cors(),wardenController.del
 
 router.post("/warden_student",cors(),wardenController.addWardenStudentRel);
 
-router.delete("/warden_student/campus_id=:campus_id&&batch=:batch",cors(),wardenController.deleteWardenStudentRel);
+router.delete("/warden_student/warden_id=:warden_id&&campus_id=:campus_id&&batch=:batch",cors(),wardenController.deleteWardenStudentRel);
+
+
+
+// MESS STUDENTS RELATIONSHIP
+
+router.post("/mess_student",cors(),wardenController.addMessStudentRel);
+
+router.delete("/mess_student/mess_id=:mess_id&&campus_id=:campus_id&&batch=:batch",cors(),wardenController.deleteMessStudentRel);
+
 
 
 // GET DETAILS
@@ -83,14 +92,19 @@ router.get("/campus",cors(),wardenController.getAllCampus);
 
 router.get("/campus/:campus_id/courses",cors(),wardenController.getCoursesByCampus);
 
-router.get("/leave_forms",cors(),wardenController.getLeaveForms);
+router.get("/leave_forms/:warden_id",cors(),wardenController.getLeaveForms);
 
-router.get("/leave_forms/status:status&&from_date:from_date&&to_date:to_date",cors(),wardenController.getLeaveFormsByDateStatus);
+router.get("/leave_forms/:warden_id/status=:status&&from_date=:from_date&&to_date=:to_date",cors(),wardenController.getLeaveFormsByDateStatus);
 
-router.get("/leave_forms/student_:student_id",cors(),wardenController.getLeaveFormsByStudentId);
+router.get("/leave_forms/:warden_id/student_id=:student_id",cors(),wardenController.getLeaveFormsByStudentId);
 
-router.put("/leave_forms/request_id=:request_id&&status=:status",cors(),wardenController.changeLeaveFormStatus);
+router.put("/leave_forms/:warden_id/request_id=:request_id&&status=:status",cors(),wardenController.changeLeaveFormStatus);
 
+router.get("/warden_student_rel",cors(),wardenController.getWardenStudentRel);
+
+router.get("/mess_student_rel",cors(),wardenController.getMessStudentRel);
+
+router.get("/complaints/:warden_id/complaint_type=:complaint_type&&status=:status&&from_date=:from_date&&to_date=:to_date",cors(),wardenController.getAllComplaints);
 
 
 module.exports = router;

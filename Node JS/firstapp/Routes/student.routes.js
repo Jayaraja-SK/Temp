@@ -15,5 +15,7 @@ router.get("/leave_forms",cors(),studentController.getLeaveForms);
 
 router.get("/personal_details",cors(),studentController.getStudentDetails);
 
+router.post("/complaint_reg",cors(),studentController.addComplaintReg);
+
 
 module.exports = router;

@@ -194,7 +194,7 @@ exports.editStudent = function (data,student_id,callback) {
 
 exports.getStudents = function (campus_id, course_id, batch, callback) {
     var dml = `select 
-    users.user_id, users.name, users.email, users.contact_no, students.dob, students.gender, students.room_no
+    users.user_id, users.name, users.email, users.contact_no, students.dob, students.gender, students.room_no, students.campus_id, students.course_id, students.batch
     from users,students
     where users.user_id=students.student_id
     and
@@ -701,6 +701,27 @@ exports.addWardenStudentRel = function (data,callback) {
 }
 
 
+exports.getWardenStudentRel = function (callback) {
+    var dml = `select 
+    wardens.warden_id, users.name, warden_students.campus_id, campus.campus_name, campus.campus_loc, warden_students.batch
+    from 
+        wardens,campus,warden_students,users
+    where
+        users.user_id=wardens.warden_id
+        and
+        warden_students.warden_id=wardens.warden_id
+        and
+        warden_students.campus_id=campus.campus_id`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
 exports.deleteWardenStudentRel = function (warden_id,campus_id,batch,callback) {
     var dml = `select * from warden_students where warden_id=${warden_id} and campus_id=${campus_id} and batch=${batch}`;
 
@@ -723,6 +744,123 @@ exports.deleteWardenStudentRel = function (warden_id,campus_id,batch,callback) {
 
             });
         }
+    });
+
+}
+
+
+exports.addMessStudentRel = function (data,callback) {
+    var dml = `select * from mess_students where mess_id=${data.mess_id} and campus_id=${data.campus_id} and batch=${data.batch}`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        if(result.length==0)
+        {
+            dml = `insert into mess_students values(${data.mess_id},${data.campus_id},${data.batch})`;
+
+            connection.query(dml,function(err,result) {
+                if(err) throw err;
+
+                return callback(true);
+
+            });
+        }
+        else
+        {
+            return callback(false);
+        }
+    });
+
+}
+
+
+exports.getMessStudentRel = function (callback) {
+    var dml = `select 
+    mess.mess_id, users.name, mess_students.campus_id, campus.campus_name, campus.campus_loc, mess_students.batch
+    from 
+        mess,campus,mess_students,users
+    where
+        users.user_id=mess.mess_id
+        and
+        mess_students.mess_id=mess.mess_id
+        and
+        mess_students.campus_id=campus.campus_id`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.deleteMessStudentRel = function (mess_id,campus_id,batch,callback) {
+    var dml = `select * from mess_students where mess_id=${mess_id} and campus_id=${campus_id} and batch=${batch}`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        if(result.length==0)
+        {
+            return callback(false);
+        }
+        else
+        {
+            dml = `delete from mess_students
+            where mess_id=${mess_id} and campus_id=${campus_id} and batch=${batch}`;
+
+            connection.query(dml,function(err,result) {
+                if(err) throw err;
+
+                return callback(true);
+
+            });
+        }
+    });
+
+}
+
+
+exports.getAllComplaints = function (warden_id, complaint_type, status, from_date, to_date, callback) {
+    var dml = `select 
+        complaint_reg.complaint_id, complaint_reg.student_id, users.name, users.contact_no, campus.campus_name, courses.course_name, students.batch, complaint_reg.complaint_date, complaint_reg.complaint_type, complaint_reg.complaint, complaint_reg.status
+    from 
+        complaint_reg, wardens, students, warden_students, users, campus, courses
+    where
+        complaint_reg.student_id=students.student_id
+        and
+        warden_students.campus_id=students.campus_id
+        and
+        warden_students.batch=students.batch
+        and
+        warden_students.warden_id=wardens.warden_id
+        and
+        users.user_id=students.student_id
+        and 
+        students.campus_id=campus.campus_id
+        and
+        students.course_id=courses.course_id
+        and
+        wardens.warden_id=${warden_id}
+        and
+        complaint_reg.complaint_type='${complaint_type}'
+        and
+        complaint_reg.status='${status}'
+        and
+        complaint_reg.complaint_date>='${from_date}'
+        and
+        complaint_reg.complaint_date<='${to_date}'
+    order by
+        complaint_reg.complaint_date DESC`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        console.log(result);
+
+        return callback(result);
     });
 
 }

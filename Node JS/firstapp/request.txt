@@ -100,3 +100,12 @@
     "campus_id": 1,
     "batch": 2019
 }
+
+# ADD COMPLAINT REG
+
+{
+    "student_id": 10,
+    "complaint_date": "2022-05-27",
+    "complaint_type": "WIFI",
+    "complaint": "NOT WORKING"
+}

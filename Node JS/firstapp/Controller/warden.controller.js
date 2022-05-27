@@ -246,7 +246,7 @@ exports.deleteCourse = function (request,response) {
 }*/
 
 
-exports.getAllCampus = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+exports.getAllCampus = function (request,response) { 
     wardenService.getAllCampus(function(result){
         response.send(result);
 
@@ -255,7 +255,7 @@ exports.getAllCampus = function (request,response) { // CHANGE IT TO SPECIFIC WA
 }
 
 
-exports.getCoursesByCampus = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+exports.getCoursesByCampus = function (request,response) { 
     wardenService.getCoursesByCampus(request.params.campus_id, function(result){
         response.send(result);
 
@@ -264,7 +264,7 @@ exports.getCoursesByCampus = function (request,response) { // CHANGE IT TO SPECI
 }
 
 
-exports.addWardenStudentRel = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
+exports.addWardenStudentRel = function (request,response) { 
     wardenService.addWardenStudentRel(request.body, function(result){
         response.send(result);
 
@@ -273,8 +273,44 @@ exports.addWardenStudentRel = function (request,response) { // CHANGE IT TO SPEC
 }
 
 
-exports.deleteWardenStudentRel = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
-    wardenService.deleteWardenStudentRel(request.body.warden_id,request.params.campus_id,request.params.batch, function(result){
+exports.getWardenStudentRel = function (request,response) { 
+    wardenService.getWardenStudentRel(function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.deleteWardenStudentRel = function (request,response) { 
+    wardenService.deleteWardenStudentRel(request.params.warden_id,request.params.campus_id,request.params.batch, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.addMessStudentRel = function (request,response) { 
+    wardenService.addMessStudentRel(request.body, function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.getMessStudentRel = function (request,response) { 
+    wardenService.getMessStudentRel(function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.deleteMessStudentRel = function (request,response) { 
+    wardenService.deleteMessStudentRel(request.params.mess_id,request.params.campus_id,request.params.batch, function(result){
         response.send(result);
 
     });
@@ -283,8 +319,8 @@ exports.deleteWardenStudentRel = function (request,response) { // CHANGE IT TO S
 
 
 
-exports.getLeaveForms = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
-    wardenService.getLeaveForms(request.body.warden_id, function(result){
+exports.getLeaveForms = function (request,response) { 
+    wardenService.getLeaveForms(request.params.warden_id, function(result){
         response.send(result);
 
     });
@@ -292,8 +328,8 @@ exports.getLeaveForms = function (request,response) { // CHANGE IT TO SPECIFIC W
 }
 
 
-exports.getLeaveFormsByDateStatus = function (request,response) { // CHANGE IT TO SPECIFIC WARDEN ID
-    wardenService.getLeaveFormsByDateStatus(request.body.warden_id, request.params.status, request.params.from_date, request.params.to_date, function(result){
+exports.getLeaveFormsByDateStatus = function (request,response) { 
+    wardenService.getLeaveFormsByDateStatus(request.params.warden_id, request.params.status, request.params.from_date, request.params.to_date, function(result){
         response.send(result);
 
     });
@@ -303,7 +339,7 @@ exports.getLeaveFormsByDateStatus = function (request,response) { // CHANGE IT T
 
 
 exports.changeLeaveFormStatus = function (request,response) {
-    wardenService.changeLeaveFormStatus(request.body.request_id, request.params.status, function(result){
+    wardenService.changeLeaveFormStatus(request.params.request_id, request.params.status, function(result){
         response.send("");
 
     });
@@ -312,7 +348,16 @@ exports.changeLeaveFormStatus = function (request,response) {
 
 
 exports.getLeaveFormsByStudentId = function (request,response) {
-    wardenService.getLeaveFormsByStudentId(request.body.warden_id, request.params.student_id,function(result){
+    wardenService.getLeaveFormsByStudentId(request.params.warden_id, request.params.student_id,function(result){
+        response.send(result);
+
+    });
+
+}
+
+
+exports.getAllComplaints = function (request,response) {
+    wardenService.getAllComplaints(request.params.warden_id, request.params.complaint_type, request.params.status, request.params.from_date, request.params.to_date,function(result){
         response.send(result);
 
     });

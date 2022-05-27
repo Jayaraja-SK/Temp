@@ -27,3 +27,12 @@ exports.getStudentDetails = function (request,response) {
     });
 
 }
+
+
+exports.addComplaintReg= function (request,response) {
+    studentService.addComplaintReg(request.body,  function(result){
+        response.send("");
+
+    });
+
+}
