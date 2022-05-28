@@ -30,6 +30,8 @@ var student = require("./Routes/student.routes");
 
 var warden = require("./Routes/warden.routes");
 
+var sub_warden = require("./Routes/subwarden.routes");
+
 var mess = require("./Routes/mess.routes");
 
 
@@ -49,6 +51,8 @@ app.get("/",function(request,response){
 
 
 app.use("/warden",warden);
+
+app.use("/sub_warden",sub_warden);
 
 app.use("/student",student);
 

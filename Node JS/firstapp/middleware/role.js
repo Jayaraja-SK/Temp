@@ -1,5 +1,6 @@
 module.exports={
     'WARDEN': ["/warden"],
     'STUDENT': ["/student"],
-    'MESS': ["/mess"]
+    'MESS': ["/mess"],
+    'SUBWARDEN': ["/sub_warden"]
 }

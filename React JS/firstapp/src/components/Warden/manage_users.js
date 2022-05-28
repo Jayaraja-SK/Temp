@@ -261,7 +261,7 @@ const AddWarden = () => {
 		email: "",
         name: "",
         contact_no: null,
-        role: "WARDEN",
+        role: "SUBWARDEN",
 		password: "",
 		dob: null,
 		doj: null

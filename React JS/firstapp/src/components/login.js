@@ -50,6 +50,10 @@ const Login = () => {
 				{
 					navigate("/warden_dashboard");
 				}
+				else if(res.data.role === "SUBWARDEN")
+				{
+					navigate("/sub_warden_dashboard");
+				}
 				else if(res.data.role === "STUDENT")
 				{
 					navigate("/student_dashboard");

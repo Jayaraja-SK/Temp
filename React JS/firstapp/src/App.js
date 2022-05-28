@@ -15,6 +15,12 @@ import { ViewAllLeaveForms, ViewLeaveFormsByFilter } from './components/Warden/l
 import { ViewAllComplaints } from './components/Warden/complaints';
 
 
+import SubWardenDashboard from "./components/Subwarden/subwarden_dashboard";
+
+import { ViewAllLeaveFormsSubWarden, ViewLeaveFormsByFilterSubWarden } from './components/Subwarden/leave_form';
+import { ViewAllComplaintsSubWarden } from './components/Subwarden/complaints';
+
+
 import StudentDashboard from "./components/Student/student_dashboard";
 
 import { AddLeaveForms, ViewLeaveFormsStudent } from './components/Student/leave_form';
@@ -57,6 +63,13 @@ function App() {
           <Route path="leave_forms" element={<ViewAllLeaveForms />}/>
           <Route path="leave_forms_filter" element={<ViewLeaveFormsByFilter />}/>
           <Route path="view_complaints" element={<ViewAllComplaints />}/>
+        </Route>
+
+
+        <Route path="sub_warden_dashboard" element={<SubWardenDashboard />}>
+          <Route path="leave_forms" element={<ViewAllLeaveFormsSubWarden />}/>
+          <Route path="leave_forms_filter" element={<ViewLeaveFormsByFilterSubWarden />}/>
+          <Route path="view_complaints" element={<ViewAllComplaintsSubWarden />}/>
         </Route>
         
 

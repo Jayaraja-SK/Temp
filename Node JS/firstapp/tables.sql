@@ -21,7 +21,7 @@ create table users(
     email varchar(50) UNIQUE,
     name varchar(50),
     contact_no int(10),
-    role varchar(20) CHECK (role in ('WARDEN','STUDENT','MESS')),
+    role varchar(20) CHECK (role in ('WARDEN','STUDENT','MESS','SUBWARDEN')),
     password varchar(255)
 );
 
