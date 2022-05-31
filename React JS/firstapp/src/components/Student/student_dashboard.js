@@ -1,53 +1,48 @@
-import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import { BrowserRouter, Routes, Route, Router, Navigate, Outlet, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import 'react-toastify/dist/ReactToastify.css';
-
+import '../login.css';
 
 
 
 const StudentDashboard = () => {
+	const navigate = useNavigate();
+
+    useEffect(() => {
+      axios.post("http://localhost:8080/student/validate", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")}} ).then((res) => {
+        console.log(res.data);
+	 	 if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+        {
+          navigate("/");
+          sessionStorage.clear();
+        }
+        else if(res.data === 'ACCESS DENIED')
+        {
+          navigate("/");
+          sessionStorage.clear();
+        }
+      });
+
+    },[]);
 
 	return(
 		<>
-			<div>
-				<h1>WELCOME STUDENT</h1>
+			<div className="wrapper">
+				<div className="sidebar">
+					<h2>Student Dashboard</h2>
+					<Link to="/"><i id="logout-icon" title="Logout" className="fa fa-sign-out" onClick={() => {sessionStorage.clear();}}></i></Link>
+					
+					<ul>
+						<li><Link to="/student_dashboard/leave_forms">View Leave Forms</Link></li>
+						<li><Link to="/student_dashboard/add_leave_form">Leave Request Form</Link></li>
+						<li><Link to="/student_dashboard/add_complaint">Register Complaints</Link></li>
+						<li><Link to="/student_dashboard/view_complaints">View Complaints</Link></li>
+						<li><Link to="/student_dashboard/bill_cancellation">Cancel Mess Bills</Link></li>
+					</ul>
+				</div>
+				<Outlet />
 			</div>
-
-			<Link to="/student_dashboard/leave_forms">
-				VIEW LEAVE FORMS
-			</Link>
-
-			<br/><br/>
-
-			<Link to="/student_dashboard/add_leave_form">
-				LEAVE REQUEST FORM
-			</Link>
-
-			<br/><br/>
-
-			<Link to="/student_dashboard/add_complaint">
-				REGISTER A COMPLAINT
-			</Link>
-
-			<br/><br/>
-
-
-			<Link to="/student_dashboard/view_complaints">
-				VIEW COMPLAINTS
-			</Link>
-
-			<br/><br/>
-
-
-			<Link to="/student_dashboard/bill_cancellation">
-				CANCEL MESS BILL
-			</Link>
-
-			<br/><br/>
-
-			<Outlet />
 		</>
 		);
 };

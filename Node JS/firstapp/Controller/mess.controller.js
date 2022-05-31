@@ -27,3 +27,20 @@ exports.getStudentsList = function (request,response) {
     });
 
 }
+
+
+exports.getCampus = function (request,response) {
+    messService.getCampus(request.params.mess_id, function(result){
+        response.send(result);
+
+    });
+
+
+}
+
+exports.getCoursesByCampus = function (request,response) { 
+    messService.getCoursesByCampus(request.params.campus_id, function(result){
+        response.send(result);
+
+});
+}

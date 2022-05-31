@@ -6,10 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import './login.css';
 
 
-const Login = () => {
-	const navigate = useNavigate();
 
-	const notify = (e) => toast(e);
+const Logout = () => {
+	const navigate = useNavigate();
 	
 	const [data, setData] = useState({
 		email: "",
@@ -19,6 +18,8 @@ const Login = () => {
 	const changeHandler = (e) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 	};
+
+	const notify = (e) => toast(e);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -43,7 +44,6 @@ const Login = () => {
 				sessionStorage.setItem("email",data.email);
 				sessionStorage.setItem("user_id",res.data.user_id);
 				sessionStorage.setItem("token",res.data.token);
-				sessionStorage.setItem("role",res.data.role);
 
 				if(res.data.role === "WARDEN")
 				{
@@ -67,27 +67,28 @@ const Login = () => {
 
 	return(
 		<>
-			<div className="login-box">
+			<div class="login-box">
 				<h2>HOSTEL MANAGEMENT PORTAL</h2>
 				<h2>Login</h2>
 				<form onSubmit={submitHandler}>
 				
-					<div className="user-box">
-						<label>Email</label>
+					<div class="user-box">
+						<label for="email">Email</label>
 						<input type="email" id="email" name="email" onChange={changeHandler} />
 					</div>
 				
-					<div className="user-box">
-						<label>Password</label>
+					<div class="user-box">
+						<label for="password">Password</label>
 						<input type="password" id="password" name="password" onChange={changeHandler} />
 					</div>
 					<button type="submit">LOGIN</button>
 				</form>
+
+				<ToastContainer/>
 			</div>
-			<ToastContainer/>
 		</>
 		);
 };
 
 
-export default Login;
+export default Logout;

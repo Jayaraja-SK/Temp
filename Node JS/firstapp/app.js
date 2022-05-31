@@ -43,20 +43,13 @@ app.get("/",function(request,response){
 
 
 
-//app.use("/warden",auth,warden);
+app.use("/warden",auth,warden);
 
-//app.use("/student",auth,student);
+app.use("/sub_warden",auth,sub_warden);
 
-//app.use("/mess",auth,mess);
+app.use("/student",auth,student);
 
-
-app.use("/warden",warden);
-
-app.use("/sub_warden",sub_warden);
-
-app.use("/student",student);
-
-app.use("/mess",mess);
+app.use("/mess",auth,mess);
 
 
 

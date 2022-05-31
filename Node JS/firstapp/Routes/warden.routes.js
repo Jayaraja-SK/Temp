@@ -106,5 +106,7 @@ router.get("/mess_student_rel",cors(),wardenController.getMessStudentRel);
 
 router.get("/complaints/:warden_id/complaint_type=:complaint_type&&status=:status&&from_date=:from_date&&to_date=:to_date",cors(),wardenController.getAllComplaints);
 
+router.post("/validate",cors(),function (request,response) { response.send(""); });
+
 
 module.exports = router;

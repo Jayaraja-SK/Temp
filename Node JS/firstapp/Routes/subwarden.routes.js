@@ -24,5 +24,7 @@ router.put("/leave_forms/:warden_id/request_id=:request_id&&status=:status",cors
 
 router.get("/complaints/:warden_id/complaint_type=:complaint_type&&status=:status&&from_date=:from_date&&to_date=:to_date",cors(),wardenController.getAllComplaints);
 
+router.post("/validate",cors(),function (request,response) { response.send(""); });
+
 
 module.exports = router;

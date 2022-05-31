@@ -20,7 +20,7 @@ create table users(
     user_id int PRIMARY KEY AUTO_INCREMENT,
     email varchar(50) UNIQUE,
     name varchar(50),
-    contact_no int(10),
+    contact_no varchar(10),
     role varchar(20) CHECK (role in ('WARDEN','STUDENT','MESS','SUBWARDEN')),
     password varchar(255)
 );

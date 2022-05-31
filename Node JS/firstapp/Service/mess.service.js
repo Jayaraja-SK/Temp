@@ -120,3 +120,34 @@ exports.getStudentsList = function (mess_id, campus_id, course_id, batch, callba
     });
 
 }
+
+
+
+exports.getCampus = function (mess_id, callback) {
+    var dml = `select 
+    campus.campus_id,campus.campus_name,campus.campus_loc
+    from campus,mess_students
+    where
+    mess_students.campus_id=campus.campus_id
+    and
+    mess_students.mess_id=${mess_id}`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}
+
+
+exports.getCoursesByCampus = function (campus_id, callback) {
+    var dml = `select * from courses where campus_id=${campus_id}`;
+
+    connection.query(dml,function(err,result,field) {
+        if(err) throw err;
+
+        return callback(result);
+    });
+
+}

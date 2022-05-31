@@ -2,11 +2,20 @@ const jwt = require('jsonwebtoken');
 const role=require('./role');
 
 module.exports = function (request, response, next) {
-    const token = request.header('x-auth-header');
+    var token;
+    
+    if(request.header('x-auth-header') === undefined)
+    {
+        token = request.body.headers['x-auth-header'];
+    }
+    else
+    {
+        token = request.header('x-auth-header');
+    }
     
     if (!token)
     {
-        return response.status(401).send('Access Denied: No Token Provided!');
+        return response.status(200).send('NO TOKEN');
     }
 
     try {
@@ -21,11 +30,11 @@ module.exports = function (request, response, next) {
         }
         else
         {
-            return response.status(401).send('ACCESS DENIED');
+            return response.status(200).send('ACCESS DENIED');
         }
     }
     
     catch (ex) {
-        res.status(401).send('Invalid Token')
+        response.status(200).send('INVALID TOKEN')
     }
 }

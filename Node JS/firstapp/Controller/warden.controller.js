@@ -7,12 +7,12 @@ exports.addAdmin = async function () {
 }
 
 exports.addStudent = function (request,response) {
-    wardenService.addUser(request.body, function(result){
+    wardenService.addUser(request.body.data, function(result){
         response.send(result);
 
         if(result == true)
         {
-            wardenService.addStudent(request.body, function(result) {
+            wardenService.addStudent(request.body.data, function(result) {
 
             })
         }
@@ -22,7 +22,7 @@ exports.addStudent = function (request,response) {
 
 
 exports.editStudent = function (request,response) {
-    wardenService.editStudent(request.body, request.params.student_id,  function(result){
+    wardenService.editStudent(request.body.data, request.params.student_id,  function(result){
         response.send("");
 
     });
@@ -31,12 +31,12 @@ exports.editStudent = function (request,response) {
 
 
 exports.addWarden = function (request,response) {
-    wardenService.addUser(request.body, function(result){
+    wardenService.addUser(request.body.data, function(result){
         response.send(result);
 
         if(result == true)
         {
-            wardenService.addWarden(request.body, function(result) {
+            wardenService.addWarden(request.body.data, function(result) {
 
             })
         }
@@ -46,7 +46,7 @@ exports.addWarden = function (request,response) {
 
 
 exports.editWarden = function (request,response) {
-    wardenService.editWarden(request.body, request.params.warden_id,  function(result){
+    wardenService.editWarden(request.body.data, request.params.warden_id,  function(result){
         response.send("");
 
     });
@@ -118,12 +118,12 @@ exports.getMessDetails = function (request,response) {
 
 
 exports.addMess = function (request,response) {
-    wardenService.addUser(request.body, function(result){
+    wardenService.addUser(request.body.data, function(result){
         response.send(result);
 
         if(result == true)
         {
-            wardenService.addMess(request.body, function(result) {
+            wardenService.addMess(request.body.data, function(result) {
 
             })
         }
@@ -133,7 +133,7 @@ exports.addMess = function (request,response) {
 
 
 exports.editMess = function (request,response) {
-    wardenService.editMess(request.body, request.params.mess_id,  function(result){
+    wardenService.editMess(request.body.data, request.params.mess_id,  function(result){
         response.send("");
 
     });
@@ -142,7 +142,7 @@ exports.editMess = function (request,response) {
 
 
 exports.editUser = function (request,response) {
-    wardenService.editUser(request.body, request.params.user_id, function(result){
+    wardenService.editUser(request.body.data, request.params.user_id, function(result){
         response.send(result);
     });
 
@@ -150,7 +150,7 @@ exports.editUser = function (request,response) {
 
 
 exports.editPassword = function (request,response) {
-    wardenService.editPassword(request.body, request.params.user_id, function(result){
+    wardenService.editPassword(request.body.data, request.params.user_id, function(result){
         response.send("");
     });
 
@@ -168,7 +168,7 @@ exports.deleteUser = function (request,response) {
 
 
 exports.addCampus = function (request,response) {
-    wardenService.addCampus(request.body, function(result){
+    wardenService.addCampus(request.body.data, function(result){
         response.send("");
 
     });
@@ -177,7 +177,7 @@ exports.addCampus = function (request,response) {
 
 
 exports.editCampus = function (request,response) {
-    wardenService.editCampus(request.body, request.params.campus_id,  function(result){
+    wardenService.editCampus(request.body.data, request.params.campus_id,  function(result){
         response.send("");
 
     });
@@ -194,9 +194,18 @@ exports.deleteCampus = function (request,response) {
 }
 
 
+exports.getAllCampus = function (request,response) { 
+    wardenService.getAllCampus(function(result){
+        response.send(result);
+
+    });
+
+}
+
+
 
 exports.addCourse = function (request,response) {
-    wardenService.addCourse(request.body, request.params.campus_id,  function(result){
+    wardenService.addCourse(request.body.data, request.params.campus_id,  function(result){
         response.send("");
 
     });
@@ -205,7 +214,7 @@ exports.addCourse = function (request,response) {
 
 
 exports.editCourse = function (request,response) {
-    wardenService.editCourse(request.body, request.params.course_id,  function(result){
+    wardenService.editCourse(request.body.data, request.params.course_id,  function(result){
         response.send("");
 
     });
@@ -246,14 +255,6 @@ exports.deleteCourse = function (request,response) {
 }*/
 
 
-exports.getAllCampus = function (request,response) { 
-    wardenService.getAllCampus(function(result){
-        response.send(result);
-
-    });
-
-}
-
 
 exports.getCoursesByCampus = function (request,response) { 
     wardenService.getCoursesByCampus(request.params.campus_id, function(result){
@@ -265,7 +266,7 @@ exports.getCoursesByCampus = function (request,response) {
 
 
 exports.addWardenStudentRel = function (request,response) { 
-    wardenService.addWardenStudentRel(request.body, function(result){
+    wardenService.addWardenStudentRel(request.body.data, function(result){
         response.send(result);
 
     });
@@ -292,7 +293,7 @@ exports.deleteWardenStudentRel = function (request,response) {
 
 
 exports.addMessStudentRel = function (request,response) { 
-    wardenService.addMessStudentRel(request.body, function(result){
+    wardenService.addMessStudentRel(request.body.data, function(result){
         response.send(result);
 
     });

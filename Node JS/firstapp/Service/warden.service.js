@@ -337,7 +337,7 @@ exports.addWarden = function (data,callback) {
 
 exports.editWarden = function (data,warden_id,callback) {
     var dml = `update wardens
-    set dob='${data.dob}', doj='${data.doj}'
+    set dob='${data.warden_dob}', doj='${data.warden_doj}'
     where warden_id=${warden_id}`;
 
     connection.query(dml,function(err,result) {

@@ -14,4 +14,11 @@ router.get("/bill_cancellations_student/:mess_id/:student_id",cors(),messControl
 
 router.get("/students_list/:mess_id/campus_id=:campus_id&&course_id=:course_id&&batch=:batch",cors(),messController.getStudentsList);
 
+
+router.get("/campus/:mess_id",cors(),messController.getCampus);
+
+router.get("/campus/:campus_id/courses",cors(),messController.getCoursesByCampus);
+
+router.post("/validate",cors(),function (request,response) { response.send(""); });
+
 module.exports = router;

@@ -3,7 +3,7 @@ var studentService = require('../Service/student.service');
 
 
 exports.addLeaveForm = function (request,response) {
-    studentService.addLeaveForm(request.body,  function(result){
+    studentService.addLeaveForm(request.body.data,  function(result){
         response.send("");
 
     });
@@ -21,7 +21,7 @@ exports.getLeaveForms = function (request,response) {
 
 
 exports.getStudentDetails = function (request,response) {
-    studentService.getStudentDetails(request.body.email_id,  function(result){
+    studentService.getStudentDetails(request.body.data.email_id,  function(result){
         response.send(result);
 
     });
@@ -30,7 +30,7 @@ exports.getStudentDetails = function (request,response) {
 
 
 exports.addComplaintReg= function (request,response) {
-    studentService.addComplaintReg(request.body,  function(result){
+    studentService.addComplaintReg(request.body.data,  function(result){
         response.send("");
 
     });
@@ -57,7 +57,7 @@ exports.changeComplaintStatus = function (request,response) {
 
 
 exports.addBillCancellation= function (request,response) {
-    studentService.addBillCancellation(request.body,  function(result){
+    studentService.addBillCancellation(request.body.data,  function(result){
         response.send("");
 
     });

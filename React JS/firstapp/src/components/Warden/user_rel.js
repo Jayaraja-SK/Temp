@@ -14,8 +14,18 @@ const AddWardenStudentRel = () => {
 	const [wardens, setWardens] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/warden/campus").then((res) => {
-		
+		axios.get("http://localhost:8080/warden/campus",{ headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
 			var i;
 
 			for(i=0;i<res.data.length;i++)
@@ -30,8 +40,18 @@ const AddWardenStudentRel = () => {
 		});
 
 
-        axios.get("http://localhost:8080/warden/wardens").then((res) => {
-		
+        axios.get("http://localhost:8080/warden/wardens",{ headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
 			var i;
 
 			for(i=0;i<res.data.length;i++)
@@ -60,11 +80,22 @@ const AddWardenStudentRel = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 
-		axios.post("http://localhost:8080/warden/warden_student", data).then((res) => {
+		axios.post("http://localhost:8080/warden/warden_student", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
 			if(res.data === true)
             {
                 document.getElementById("add_warden_student_rel").reset();
-			    notify("DETAILS ADDED SUCCESSFULLY");
+			    notify("WARDEN <---> STUDENT ADDED SUCCESSFULLY");
             }
             else
             {
@@ -76,66 +107,42 @@ const AddWardenStudentRel = () => {
 
 	return(
 		<>
-			<div className="main">
-				<form id="add_warden_student_rel" onSubmit={submitHandler}>
+			<div className="main_content">
+				<div className="header">Add Warden Student Relationship</div>
+				<div className="info">
+					<div className="container">
+						<form id="add_warden_student_rel" onSubmit={submitHandler}>
+							<label>Warden</label>
+							<select name="warden_id" id="warden_id" onChange={changeHandler} required>
+								<option value="">Select Warden</option> 
+								{
+									wardens.map((wardens,key) => {
+										return <option key={key} value={wardens.user_id}>{wardens.value}</option>;
+									})
+								}
+							</select>
+							<br/><br/>
 
-                <h3>
-                    ADD WARDEN STUDENT RELATIONSHIP
-                </h3>
+							<label>Campus</label>
+							<select name="campus_id" id="campus_id" onChange={changeHandler} required>
+								<option value="">Select Campus</option> 
+								{
+									campus.map((campus,key) => {
+										return <option key={key} value={campus.campus_id}>{campus.value}</option>;
+									})
+								}
+							</select>
+							<br/><br/>
 
+							<label>Batch</label>
+							<input type="number" id="batch" name="batch" onChange={changeHandler} defaultValue={data.batch} required/>
+							<br/><br/>
+							<br/><br/>
 
-                <label>
-                    WARDEN
-                </label>
-
-                <br/>
-
-                <select name="warden_id" id="warden_id" onChange={changeHandler} required>
-                    <option value="">Select Warden</option> 
-                    {
-                        wardens.map((wardens,key) => {
-                            return <option key={key} value={wardens.user_id}>{wardens.value}</option>;
-                        })
-                    }
-                </select>
-
-                <br/>
-
-                <label>
-                    CAMPUS
-                </label>
-
-                <br/>
-
-                <select name="campus_id" id="campus_id" onChange={changeHandler} required>
-                    <option value="">Select Campus</option> 
-                    {
-                        campus.map((campus,key) => {
-                            return <option key={key} value={campus.campus_id}>{campus.value}</option>;
-                        })
-                    }
-                </select>
-
-                <br/>
-
-                <label>
-					BATCH
-				</label>
-
-				<br/>
-
-				<input type="number" id="batch" name="batch" onChange={changeHandler} defaultValue={data.batch}>
-				</input>
-
-				<br/>
-
-				<button type="submit">
-						SUBMIT
-				</button>
-
-				<br/><br/><br/>
-				</form>
-
+							<button type="submit">Submit</button>
+						</form>
+					</div>
+				</div>
 				<ToastContainer/>
 			</div>
 		</>
@@ -147,11 +154,29 @@ const ViewWardenStudentRel = () => {
 
 	const navigate = useNavigate();
 
+	const notify = (e) => toast(e);
+
 	const [data, setData] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/warden/warden_student_rel").then((res) => {
-            var i;
+		axios.get("http://localhost:8080/warden/warden_student_rel",{ headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+            if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
+			if(res.data.length === 0)
+			{
+				notify("NO RECORDS FOUND");
+			}
+
+			var i;
 
             for(i=0;i<res.data.length;i++)
             {
@@ -164,7 +189,18 @@ const ViewWardenStudentRel = () => {
 	},[]);
 
 	const deleteHandler = (warden_id,campus_id,batch) => {
-        axios.delete("http://localhost:8080/warden/warden_student/warden_id="+warden_id+"&&campus_id="+campus_id+"&&batch="+batch).then((res) => {
+        axios.delete("http://localhost:8080/warden/warden_student/warden_id="+warden_id+"&&campus_id="+campus_id+"&&batch="+batch,{ headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
 			window.location.reload();
 		});
 	}
@@ -172,35 +208,40 @@ const ViewWardenStudentRel = () => {
 
 	return(
 		<>
-		<br/><br/>
-			<div className="main">
-				<table>
-				<thead>
-                    <tr>
-						<th>WARDEN ID</th>
-                        <th>WARDEN NAME</th>
-                        <th>CAMPUS ID</th>
-                        <th>CAMPUS NAME</th>
-                        <th>CAMPUS LOCATION</th>
-                        <th>BATCH</th>
-                    </tr>
-                </thead>
+			<div className="main_content">
+				<div className="header fix">Warden Student Relationship</div>
+				<div className="info">
+					<table>
+						<thead>
+							<tr>
+								<th>Warden Id</th>
+								<th>Warden Name</th>
+								<th>Campus Id</th>
+								<th>Campus Name</th>
+								<th>Campus Location</th>
+								<th>Batch</th>
+							</tr>
+						</thead>
 
-				<tbody>
-                    {data && data.map(data =>
-                        <tr key={data.id}>
-							<td>{data.warden_id}</td>
-                            <td>{data.name}</td>
-                            <td>{data.campus_id}</td>
-                            <td>{data.campus_name}</td>
-                            <td>{data.campus_loc}</td>
-                            <td>{data.batch}</td>
-							<td><button onClick={() => deleteHandler(data.warden_id,data.campus_id,data.batch)}>DELETE</button></td>
-                        </tr>
-                    )}
-                </tbody>
-				</table>
-
+						<tbody>
+							{data && data.map(data =>
+								<tr key={data.id}>
+									<td>{data.warden_id}</td>
+									<td>{data.name}</td>
+									<td>{data.campus_id}</td>
+									<td>{data.campus_name}</td>
+									<td>{data.campus_loc}</td>
+									<td>{data.batch}</td>
+									<td>
+										<span>
+											<button onClick={() => deleteHandler(data.warden_id,data.campus_id,data.batch)}>DELETE</button>
+										</span>
+									</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+				</div>
 				<ToastContainer/>
 			</div>
 		</>
@@ -215,10 +256,21 @@ const AddMessStudentRel = () => {
 	const [campus, setCampus] = useState([]);
 
 	const [mess, setMess] = useState([]);
+	
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/warden/campus").then((res) => {
-		
+		axios.get("http://localhost:8080/warden/campus",{ headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
 			var i;
 
 			for(i=0;i<res.data.length;i++)
@@ -233,8 +285,18 @@ const AddMessStudentRel = () => {
 		});
 
 
-        axios.get("http://localhost:8080/warden/mess").then((res) => {
-		
+        axios.get("http://localhost:8080/warden/mess", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
 			var i;
 
 			for(i=0;i<res.data.length;i++)
@@ -263,11 +325,22 @@ const AddMessStudentRel = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 
-		axios.post("http://localhost:8080/warden/mess_student", data).then((res) => {
+		axios.post("http://localhost:8080/warden/mess_student", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			
 			if(res.data === true)
             {
                 document.getElementById("add_mess_student_rel").reset();
-			    notify("DETAILS ADDED SUCCESSFULLY");
+			    notify("MESS <---> STUDENT ADDED SUCCESSFULLY");
             }
             else
             {
@@ -279,66 +352,42 @@ const AddMessStudentRel = () => {
 
 	return(
 		<>
-			<div className="main">
-				<form id="add_mess_student_rel" onSubmit={submitHandler}>
+			<div className="main_content">
+				<div className="header">Add Mess Student Relationship</div>
+				<div className="info">
+					<div className="container">
+						<form id="add_mess_student_rel" onSubmit={submitHandler}>
+							<label>Mess</label>
+							<select name="mess_id" id="mess_id" onChange={changeHandler} required>
+								<option value="">Select Mess</option> 
+								{
+									mess.map((mess,key) => {
+										return <option key={key} value={mess.user_id}>{mess.value}</option>;
+									})
+								}
+							</select>
+							<br/><br/>
 
-                <h3>
-                    ADD MESS STUDENT RELATIONSHIP
-                </h3>
+							<label>Campus</label>
+							<select name="campus_id" id="campus_id" onChange={changeHandler} required>
+								<option value="">Select Campus</option> 
+								{
+									campus.map((campus,key) => {
+										return <option key={key} value={campus.campus_id}>{campus.value}</option>;
+									})
+								}
+							</select>
+							<br/><br/>
 
+							<label>Batch</label>
+							<input type="number" id="batch" name="batch" onChange={changeHandler} defaultValue={data.batch} required/>
+							<br/><br/>
+							<br/><br/>
 
-                <label>
-                    MESS
-                </label>
-
-                <br/>
-
-                <select name="mess_id" id="mess_id" onChange={changeHandler} required>
-                    <option value="">Select Mess</option> 
-                    {
-                        mess.map((mess,key) => {
-                            return <option key={key} value={mess.user_id}>{mess.value}</option>;
-                        })
-                    }
-                </select>
-
-                <br/>
-
-                <label>
-                    CAMPUS
-                </label>
-
-                <br/>
-
-                <select name="campus_id" id="campus_id" onChange={changeHandler} required>
-                    <option value="">Select Campus</option> 
-                    {
-                        campus.map((campus,key) => {
-                            return <option key={key} value={campus.campus_id}>{campus.value}</option>;
-                        })
-                    }
-                </select>
-
-                <br/>
-
-                <label>
-					BATCH
-				</label>
-
-				<br/>
-
-				<input type="number" id="batch" name="batch" onChange={changeHandler} defaultValue={data.batch}>
-				</input>
-
-				<br/>
-
-				<button type="submit">
-						SUBMIT
-				</button>
-
-				<br/><br/><br/>
-				</form>
-
+							<button type="submit">Submit</button>
+						</form>
+					</div>
+				</div>
 				<ToastContainer/>
 			</div>
 		</>
@@ -350,11 +399,29 @@ const ViewMessStudentRel = () => {
 
 	const navigate = useNavigate();
 
+	const notify = (e) => toast(e);
+
 	const [data, setData] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://localhost:8080/warden/mess_student_rel").then((res) => {
-            var i;
+		axios.get("http://localhost:8080/warden/mess_student_rel", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+            if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+
+			if(res.data.length === 0)
+			{
+				notify("NO RECORDS FOUND");
+			}
+			
+			var i;
 
             for(i=0;i<res.data.length;i++)
             {
@@ -367,7 +434,18 @@ const ViewMessStudentRel = () => {
 	},[]);
 
 	const deleteHandler = (mess_id,campus_id,batch) => {
-        axios.delete("http://localhost:8080/warden/mess_student/mess_id="+mess_id+"&&campus_id="+campus_id+"&&batch="+batch).then((res) => {
+        axios.delete("http://localhost:8080/warden/mess_student/mess_id="+mess_id+"&&campus_id="+campus_id+"&&batch="+batch, { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			
 			window.location.reload();
 		});
 	}
@@ -375,35 +453,40 @@ const ViewMessStudentRel = () => {
 
 	return(
 		<>
-		<br/><br/>
-			<div className="main">
-				<table>
-				<thead>
-                    <tr>
-						<th>MESS ID</th>
-                        <th>MESS NAME</th>
-                        <th>CAMPUS ID</th>
-                        <th>CAMPUS NAME</th>
-                        <th>CAMPUS LOCATION</th>
-                        <th>BATCH</th>
-                    </tr>
-                </thead>
+			<div className="main_content">
+				<div className="header fix">Mess Student Relationship</div>
+				<div className="info">
+					<table>
+						<thead>
+							<tr>
+								<th>Mess Id</th>
+								<th>Mess Name</th>
+								<th>Campus Id</th>
+								<th>Campus Name</th>
+								<th>Campus Location</th>
+								<th>Batch</th>
+							</tr>
+						</thead>
 
-				<tbody>
-                    {data && data.map(data =>
-                        <tr key={data.id}>
-							<td>{data.mess_id}</td>
-                            <td>{data.name}</td>
-                            <td>{data.campus_id}</td>
-                            <td>{data.campus_name}</td>
-                            <td>{data.campus_loc}</td>
-                            <td>{data.batch}</td>
-							<td><button onClick={() => deleteHandler(data.mess_id,data.campus_id,data.batch)}>DELETE</button></td>
-                        </tr>
-                    )}
-                </tbody>
-				</table>
-
+						<tbody>
+							{data && data.map(data =>
+								<tr key={data.id}>
+									<td>{data.mess_id}</td>
+									<td>{data.name}</td>
+									<td>{data.campus_id}</td>
+									<td>{data.campus_name}</td>
+									<td>{data.campus_loc}</td>
+									<td>{data.batch}</td>
+									<td>
+										<span>
+											<button onClick={() => deleteHandler(data.mess_id,data.campus_id,data.batch)}>DELETE</button>
+										</span>
+									</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+				</div>
 				<ToastContainer/>
 			</div>
 		</>

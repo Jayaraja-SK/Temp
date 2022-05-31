@@ -1,38 +1,54 @@
-import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import { BrowserRouter, Routes, Route, Router, Navigate, Outlet, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import 'react-toastify/dist/ReactToastify.css';
-
+import '../login.css';
 
 
 
 const MessDashboard = () => {
+    const navigate = useNavigate();
 
-	return(
-		<>
-			<div>
-				<h1>WELCOME MESS</h1>
-			</div>
+    useEffect(() => {
+      axios.post("http://localhost:8080/mess/validate", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")}} ).then((res) => {
+        if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+        {
+          navigate("/");
+          sessionStorage.clear();
+        }
+        else if(res.data === 'ACCESS DENIED')
+        {
+          navigate("/");
+          sessionStorage.clear();
+        }
+      });
 
-			<Link to="/mess_dashboard/view_bill_cancellations">
-				VIEW BILL CANCELLATIONS BY FILTER
-			</Link>
+    },[]);
 
-			<br/><br/>
+    return (
+      <>
+        <div className="wrapper">
+          <div className="sidebar">
+            <h2>Mess Dashboard</h2>
+            <Link to="/"><i id="logout-icon" title="Logout" className="fa fa-sign-out" onClick={() => {sessionStorage.clear();}}></i></Link>
 
-
-			<Link to="/mess_dashboard/view_students_list">
-				VIEW STUDENTS LIST
-			</Link>
-
-			<br/><br/>
-
-
-			<Outlet />
-		</>
-		);
+            <ul>
+              <li>
+                <Link to="/mess_dashboard/view_bill_cancellations">
+                  View Bill Cancellation by Filter
+                </Link>
+              </li>
+              <li>
+                <Link to="/mess_dashboard/view_students_list">
+                  View Students List
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <Outlet />
+        </div>
+      </>
+    );
 };
-
 
 export default MessDashboard;
