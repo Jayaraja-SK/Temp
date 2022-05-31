@@ -19,6 +19,8 @@ router.get("/campus/:mess_id",cors(),messController.getCampus);
 
 router.get("/campus/:campus_id/courses",cors(),messController.getCoursesByCampus);
 
+router.put("/change_pwd/:mess_id",cors(),messController.changePassword);
+
 router.post("/validate",cors(),function (request,response) { response.send(""); });
 
 module.exports = router;

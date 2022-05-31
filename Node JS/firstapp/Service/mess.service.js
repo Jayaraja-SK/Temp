@@ -3,6 +3,7 @@ const app = express();
 const mysql = require("mysql");
 const cors = require('cors');
 const req = require("express/lib/request");
+const bcrypt = require("bcryptjs");
 
 app.use(express.json());
 
@@ -10,7 +11,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Spacex",
+    password: process.env.DB_PASSWORD,
     database: "hostel"
 });
 
@@ -148,6 +149,33 @@ exports.getCoursesByCampus = function (campus_id, callback) {
         if(err) throw err;
 
         return callback(result);
+    });
+
+}
+
+
+exports.changePassword = function (user_id,data,callback) {
+    var dml = `select password from users where user_id=${user_id}`;
+
+    connection.query(dml,function(err,result) {
+        if(err) throw err;
+
+        if(bcrypt.compareSync(data.password,result[0].password))
+        {
+            const password = bcrypt.hashSync(data.new_password,10);
+
+            dml = `update users set password='${password}' where user_id=${user_id}`;
+
+            connection.query(dml,function(err,result) {
+                if(err) throw err;
+
+                return callback(true);
+            });
+        }
+        else
+        {
+            return callback(false);
+        }
     });
 
 }

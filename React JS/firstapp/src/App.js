@@ -5,11 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from './components/login';
 
-
 import WardenDashboard from "./components/Warden/warden_dashboard";
 
 import {AddCampus, ViewCampus, EditCampus, AddCourse, ViewCourses, EditCourse} from "./components/Warden/campus_courses";
-import { AddWarden, AddStudent, AddMess, ViewWardens, EditWarden, EditUser, ViewMess, EditMess, ViewStudents, EditStudent } from './components/Warden/manage_users';
+import { AddWarden, AddStudent, AddMess, ViewWardens, EditWarden, EditUser, ViewMess, EditMess, ViewStudents, EditStudent, ChangePassword } from './components/Warden/manage_users';
 import { AddWardenStudentRel, ViewWardenStudentRel, AddMessStudentRel, ViewMessStudentRel } from "./components/Warden/user_rel"
 import { ViewAllLeaveForms, ViewLeaveFormsByFilter } from './components/Warden/leave_form';
 import { ViewAllComplaints } from './components/Warden/complaints';
@@ -19,6 +18,7 @@ import SubWardenDashboard from "./components/Subwarden/subwarden_dashboard";
 
 import { ViewAllLeaveFormsSubWarden, ViewLeaveFormsByFilterSubWarden } from './components/Subwarden/leave_form';
 import { ViewAllComplaintsSubWarden } from './components/Subwarden/complaints';
+import SubwardenChangePassword from './components/Subwarden/change_pwd';
 
 
 import StudentDashboard from "./components/Student/student_dashboard";
@@ -26,10 +26,12 @@ import StudentDashboard from "./components/Student/student_dashboard";
 import { AddLeaveForms, ViewLeaveFormsStudent } from './components/Student/leave_form';
 import { AddComplaint, ViewComplaintsStudent } from './components/Student/complaints';
 import { AddBillCancellation } from './components/Student/bill_cancellation';
+import StudentChangePassword from './components/Student/change_pwd';
 
 
 import MessDashboard from "./components/Mess/mess_dashboard";
 import { ViewBillCancellationByFilter, ViewStudentBillCancellations, ViewStudentsList } from './components/Mess/bill_cancellation';
+import MessChangePassword from './components/Mess/change_pwd';
 
 
 
@@ -56,6 +58,7 @@ function App() {
           <Route path="view_students" element={<ViewStudents />}/>
           <Route path="edit_student" element={<EditStudent />}/>
           <Route path="edit_user" element={<EditUser />}/>
+          <Route path="change_pwd" element={<ChangePassword/>}/>
           <Route path="add_warden_student_rel" element={<AddWardenStudentRel />}/>
           <Route path="view_warden_student_rel" element={<ViewWardenStudentRel />}/>
           <Route path="add_mess_student_rel" element={<AddMessStudentRel />}/>
@@ -70,21 +73,24 @@ function App() {
           <Route path="leave_forms" element={<ViewAllLeaveFormsSubWarden />}/>
           <Route path="leave_forms_filter" element={<ViewLeaveFormsByFilterSubWarden />}/>
           <Route path="view_complaints" element={<ViewAllComplaintsSubWarden />}/>
+          <Route path="change_pwd" element={<SubwardenChangePassword />}/>
         </Route>
         
 
-        <Route path="/student_dashboard" element={<StudentDashboard />}>
+        <Route path="student_dashboard" element={<StudentDashboard />}>
           <Route path="leave_forms" element={<ViewLeaveFormsStudent />}/>
           <Route path="add_leave_form" element={<AddLeaveForms />}/>
           <Route path="add_complaint" element={<AddComplaint />}/>
           <Route path="view_complaints" element={<ViewComplaintsStudent />}/>
           <Route path="bill_cancellation" element={<AddBillCancellation />}/>
+          <Route path="change_pwd" element={<StudentChangePassword />}/>
         </Route>
 
-        <Route path="/mess_dashboard" element={<MessDashboard />}>
+        <Route path="mess_dashboard" element={<MessDashboard />}>
           <Route path="view_bill_cancellations" element={<ViewBillCancellationByFilter />}/>
           <Route path="view_students_list" element={<ViewStudentsList />}/>
           <Route path="student_bill_cancellations" element={<ViewStudentBillCancellations />}/>
+          <Route path="change_pwd" element={<MessChangePassword />}/>
         </Route>
 
         

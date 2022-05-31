@@ -43,6 +43,7 @@ const MessDashboard = () => {
                   View Students List
                 </Link>
               </li>
+              <li><Link to="/mess_dashboard/change_pwd">Change Password</Link></li>
             </ul>
           </div>
           <Outlet />

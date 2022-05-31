@@ -23,6 +23,8 @@ router.put("/complaint/complaint_id=:complaint_id&&status=:status",cors(),studen
 
 router.post("/bill_cancellation",cors(),studentController.addBillCancellation);
 
+router.put("/change_pwd/:student_id",cors(),studentController.changePassword);
+
 router.post("/validate",cors(),function (request,response) { response.send(""); });
 
 module.exports = router;

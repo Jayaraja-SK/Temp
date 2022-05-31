@@ -8,13 +8,15 @@ const User = require('../Model/user.model');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
+const dotenv = require('dotenv').config();
+
 app.use(express.json());
 
 
 const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Spacex",
+    password: process.env.DB_PASSWORD,
     database: "hostel"
 });
 

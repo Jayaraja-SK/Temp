@@ -44,3 +44,12 @@ exports.getCoursesByCampus = function (request,response) {
 
 });
 }
+
+
+exports.changePassword= function (request,response) {
+    messService.changePassword(request.params.mess_id, request.body.data, function(result){
+        response.send(result);
+
+    });
+
+}

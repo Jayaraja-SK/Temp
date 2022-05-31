@@ -45,6 +45,7 @@ const SubWardenDashboard = () => {
                   View All Complaints
                 </Link>
               </li>
+              <li><Link to="/sub_warden_dashboard/change_pwd">Change Password</Link></li>
             </ul>
           </div>
           <Outlet />

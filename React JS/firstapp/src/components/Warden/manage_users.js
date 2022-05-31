@@ -949,6 +949,16 @@ const ViewStudents = () => {
 
 	}
 
+
+	const editHandler3 = (id,email) => {
+		sessionStorage.setItem("pwd_user_id",id);
+		sessionStorage.setItem("pwd_email",email);
+		
+
+		navigate("/warden_dashboard/change_pwd");
+
+	}
+
 	const deleteHandler = (id) => {
 		axios.delete("http://localhost:8080/warden/user/"+id, { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
 			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
@@ -1067,6 +1077,7 @@ const ViewStudents = () => {
 										<span className="td-btn">
 											<button onClick={() => editHandler1(data.user_id, data.name, data.email, data.contact_no)}>EDIT ACCOUNT INFO</button>
 											<button onClick={() => editHandler2(data.user_id, data.name, data.email, data.dob, data.gender, data.room_no, data.campus_id, data.course_id, data.batch)}>EDIT PERSONAL INFO</button>
+											<button onClick={() => editHandler3(data.user_id,data.email)}>CHANGE PASSWORD</button>
 											<button onClick={() => deleteHandler(data.user_id)}>DELETE</button>
 										</span>
 									</td>
@@ -1135,6 +1146,15 @@ const ViewMess = () => {
 
 	}
 
+
+	const editHandler3 = (id,email) => {
+		sessionStorage.setItem("pwd_user_id",id);
+		sessionStorage.setItem("pwd_email",email);
+
+		navigate("/warden_dashboard/change_pwd");
+
+	}
+
 	const deleteHandler = (id) => {
 		axios.delete("http://localhost:8080/warden/user/"+id, { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
 			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
@@ -1184,6 +1204,7 @@ const ViewMess = () => {
 									<span>
 										<button onClick={() => editHandler1(data.user_id, data.name, data.email, data.contact_no)}>EDIT ACCOUNT INFO</button>
 										<button onClick={() => editHandler2(data.user_id, data.name, data.email, data.company_name, data.company_loc)}>EDIT PERSONAL INFO</button>
+										<button onClick={() => editHandler3(data.user_id,data.email)}>CHANGE PASSWORD</button>
 										<button onClick={() => deleteHandler(data.user_id)}>DELETE</button>
 									</span>
 								</td>
@@ -1261,6 +1282,16 @@ const ViewWardens = () => {
 
 	}
 
+
+	const editHandler3 = (id,email) => {
+		sessionStorage.setItem("pwd_user_id",id);
+		sessionStorage.setItem("pwd_email",email);
+		
+
+		navigate("/warden_dashboard/change_pwd");
+
+	}
+
 	const deleteHandler = (id) => {
 		axios.delete("http://localhost:8080/warden/user/"+id, { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
 			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
@@ -1292,8 +1323,8 @@ const ViewWardens = () => {
 								<th>Name</th>
 								<th>Email</th>
 								<th>Contact No.</th>
-								<th>DOB</th>
-								<th>DOJ</th>
+								<th>Date of Birth</th>
+								<th>Date of Join</th>
 							</tr>
 						</thead>
 
@@ -1310,6 +1341,7 @@ const ViewWardens = () => {
 									<span>
 									<button onClick={() => editHandler1(data.user_id, data.name, data.email, data.contact_no)}>EDIT ACCOUNT INFO</button>
 									<button onClick={() => editHandler2(data.user_id, data.name, data.email, data.dob, data.doj)}>EDIT PERSONAL INFO</button>
+									<button onClick={() => editHandler3(data.user_id,data.email)}>CHANGE PASSWORD</button>
 									<button onClick={() => deleteHandler(data.user_id)}>DELETE</button>
 									</span>
 									</td>
@@ -1325,6 +1357,71 @@ const ViewWardens = () => {
 };
 
 
+const ChangePassword = () => {
+
+	const navigate = useNavigate();
+
+	const [data, setData] = useState({
+		user_id: sessionStorage.getItem("pwd_user_id"),
+		email: sessionStorage.getItem("pwd_email")
+	  });
+
+	const notify = (e) => toast(e);
+
+	const changeHandler = (e) => {
+		setData({ ...data, [e.target.name]: e.target.value });
+	};
 
 
-export {AddStudent, AddWarden, AddMess, ViewWardens, EditWarden, EditUser, ViewMess, EditMess, ViewStudents, EditStudent};
+	const submitHandler = (e) => {
+		e.preventDefault();
+
+		axios.put("http://localhost:8080/warden/user/pwd/"+data.user_id, { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")},data}).then((res) => {
+			if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			else if(res.data === 'ACCESS DENIED')
+			{
+				navigate("/");
+				sessionStorage.clear();
+			}
+			
+			sessionStorage.removeItem("pwd_user_id");
+			sessionStorage.removeItem("pwd_email");
+
+			notify("PASSWORD EDITED SUCCESSFULLY");
+
+			//navigate("/warden_dashboard/view_mess");
+    });
+	}
+
+
+	return(
+		<>
+		<div className="main_content">
+			<div className="header">Edit Password for - {data.email}  </div>
+			<div className="info">
+				<div className="container">
+					
+					<form onSubmit={submitHandler}>
+						<label>New Password</label>
+						<input type="password" id="password" name="password" onChange={changeHandler} required/>
+						<br/><br/>
+
+						<br/><br/>
+
+						<button type="submit">Submit</button>
+					</form>
+				</div>
+			</div>
+				<ToastContainer/>
+			</div>
+		</>
+		);
+};
+
+
+
+export {AddStudent, AddWarden, AddMess, ViewWardens, EditWarden, EditUser, ViewMess, EditMess, ViewStudents, EditStudent, ChangePassword};

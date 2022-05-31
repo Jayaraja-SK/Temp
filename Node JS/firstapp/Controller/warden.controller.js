@@ -364,3 +364,12 @@ exports.getAllComplaints = function (request,response) {
     });
 
 }
+
+
+exports.changePassword= function (request,response) {
+    wardenService.changePassword(request.params.sub_warden_id, request.body.data, function(result){
+        response.send(result);
+
+    });
+
+}

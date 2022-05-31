@@ -63,3 +63,12 @@ exports.addBillCancellation= function (request,response) {
     });
 
 }
+
+
+exports.changePassword= function (request,response) {
+    studentService.changePassword(request.params.student_id, request.body.data, function(result){
+        response.send(result);
+
+    });
+
+}

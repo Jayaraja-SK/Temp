@@ -11,7 +11,6 @@ const StudentDashboard = () => {
 
     useEffect(() => {
       axios.post("http://localhost:8080/student/validate", { headers: {'Content-Type': 'application/json','x-auth-header': sessionStorage.getItem("token")}} ).then((res) => {
-        console.log(res.data);
 	 	 if(res.data === 'INVALID TOKEN' || res.data === 'NO TOKEN')
         {
           navigate("/");
@@ -39,6 +38,7 @@ const StudentDashboard = () => {
 						<li><Link to="/student_dashboard/add_complaint">Register Complaints</Link></li>
 						<li><Link to="/student_dashboard/view_complaints">View Complaints</Link></li>
 						<li><Link to="/student_dashboard/bill_cancellation">Cancel Mess Bills</Link></li>
+						<li><Link to="/student_dashboard/change_pwd">Change Password</Link></li>
 					</ul>
 				</div>
 				<Outlet />

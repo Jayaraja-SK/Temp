@@ -74,12 +74,12 @@ const Login = () => {
 				
 					<div className="user-box">
 						<label>Email</label>
-						<input type="email" id="email" name="email" onChange={changeHandler} />
+						<input type="email" id="email" name="email" onChange={changeHandler} required/>
 					</div>
 				
 					<div className="user-box">
 						<label>Password</label>
-						<input type="password" id="password" name="password" onChange={changeHandler} />
+						<input type="password" id="password" name="password" onChange={changeHandler} required/>
 					</div>
 					<button type="submit">LOGIN</button>
 				</form>
