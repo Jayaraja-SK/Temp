@@ -1,0 +1,18 @@
+{
+    "firstname": "Sam",
+    "lastname": "Jack",
+    "password": "sam",
+    "email": "user2@user"   
+}
+
+
+{
+    "amount":"100",
+    "purpose":"Personal",
+    "emiMonths":8000,
+    "interest":10,
+    "user": 
+    {
+        "id": "03d1fb3c-254e-4161-b074-a34aa755a468"
+    } 
+}
