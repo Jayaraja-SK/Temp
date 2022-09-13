@@ -1,0 +1,270 @@
+#include<glut/glut.h>
+
+
+
+void myInit() {
+
+    glClearColor(1.0,1.0,1.0,0.0);
+
+    //glColor3f(0.0f,0.0f,0.0f);
+
+    //glPointSize(10);
+
+    glLineWidth(10);
+
+    glMatrixMode(GL_PROJECTION);
+
+    glLoadIdentity();
+
+    gluOrtho2D(0.0,640.0,0.0,480.0);
+
+}
+
+
+
+
+
+void Points()
+
+{
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_POINTS);
+
+    glVertex2d(150,100);
+
+    glVertex2d(100,230);
+
+    glVertex2d(170,130);
+
+    glVertex2d(300,350);
+
+    glEnd();
+
+    glFlush();
+
+}
+
+
+
+
+
+void Lines()
+
+{
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_LINES);
+
+    glVertex3f(100.0f,100.0f,0.0f);
+
+    glVertex3f(200.0f,200.0f,0.0f);
+
+    glEnd();
+
+    glFlush();
+
+}
+
+
+
+
+
+void LineStrip()
+
+{
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_LINE_STRIP);
+
+    glVertex3f(100.0f,100.0f,0.0f);
+
+    glVertex3f(200.0f,200.0f,0.0f);
+
+    glVertex3f(200.0f,300.0f,0.0f);
+
+    glEnd();
+
+    glFlush();
+
+}
+
+
+
+void Triangle()
+
+{
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_TRIANGLE_STRIP);
+
+    glVertex3f(100.0f,100.0f,0.0f);
+
+    glVertex3f(200.0f,200.0f,0.0f);
+
+    glVertex3f(200.0f,300.0f,0.0f);
+
+    glEnd();
+
+    glFlush();
+
+}
+
+
+
+
+
+void Square()
+
+{
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_QUADS);
+
+    glColor3f(0.0f,0.0f,0.0f);
+
+    glVertex3f(0.0f,100.0f,0.0f);
+
+    glVertex3f(100.0f,100.0f,0.0f);
+
+    glVertex3f(100.0f,0.0f,0.0f);
+
+    glVertex3f(0.0f,0.0f,0.0f);
+
+    glEnd();
+
+    glFlush();
+
+}
+
+
+
+
+
+void Square_CB(float color, float xa, float ya, float xb, float yb)
+
+{
+
+    glBegin(GL_QUADS); // ON USING POLYGON, GL_END IS TO BE ADDED AFTER EACH SQUARE
+
+    glColor3f(color, color, color);
+
+    glVertex3f(xa,ya,0.0f);
+
+    glVertex3f(xb,ya,0.0f);
+
+    glVertex3f(xb,yb,0.0f);
+
+    glVertex3f(xa,yb,0.0f);
+
+    glEnd();
+
+}
+
+
+
+
+
+
+
+void Chess_Board()
+
+{
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+
+    int i,j;
+
+    
+
+    float x=0, y=0;
+
+    
+
+    for(i=0;i<8;i++)
+
+    {
+
+        for(j=0;j<8;j++)
+
+        {
+
+            float color;
+
+            
+
+            if((i+j)%2==0)
+
+            {
+
+                color = 255;
+
+            }
+
+            else
+
+            {
+
+                color = 0;
+
+            }
+
+            
+
+            Square_CB(color, x, y, x+50, y+50);
+
+            
+
+            x=x+50;
+
+        }
+
+        x=0;
+
+        y=y+50;
+
+    }
+
+    
+
+    glEnd();
+
+    glFlush();
+
+}
+
+
+
+
+
+
+
+int main(int argc,char* argv[])
+
+{
+
+    glutInit(&argc,argv);
+
+    glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+
+    glutInitWindowSize(640,480);
+
+    glutCreateWindow("First Exercise");
+
+    glutDisplayFunc(Chess_Board);
+
+    myInit();
+
+    glutMainLoop();
+
+    return 1;
+
+}
+
