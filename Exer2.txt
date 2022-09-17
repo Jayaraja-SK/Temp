@@ -1,12 +1,10 @@
-#include<glut/glut.h>
+#include<GL/glut.h>
 
 #include <iostream>
 
 #include <cmath>
 
 #include <cstring>
-
-
 
 using namespace std;
 
@@ -30,28 +28,37 @@ void myInit() {
 
 
 
-
-
-void Points()
-
+void plotPointString(int x, int y, int pos)
 {
+    glRasterPos2f(x,y+pos);
+  
 
-    //glClear(GL_COLOR_BUFFER_BIT);
+    std::string string;
 
+    
+
+    string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
+
+    
+
+    char *s=const_cast<char*>(string.c_str());
+
+    
+
+    for (char* c = s; *c != '\0'; c++)
+
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
+}
+
+
+
+void plotPoint(int x, int y)
+{
     glBegin(GL_POINTS);
 
-    glVertex2d(150,100);
-
-    glVertex2d(100,230);
-
-    glVertex2d(170,130);
-
-    glVertex2d(300,350);
+    glVertex2f(x,y);
 
     glEnd();
-
-    glFlush();
-
 }
 
 
@@ -68,15 +75,11 @@ void DDA()
 
     
 
-    glRasterPos2f(2.0f,-10.0f);
+    glRasterPos2f(0.0f,0.0f);
 
     
 
-    char* string="(0,0)";
-
-    for (char* c = string; *c != '\0'; c++)
-
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
+    plotPointString(0,0,0);
 
     
 
@@ -104,125 +107,60 @@ void DDA()
 
     glEnd();
 
-    
+    float xa,ya,xb,yb;
 
-    
-
-    
-
-    float xa=4,ya=7,xb=7,yb=3;
+    cout << "xa = ";
+    cin >> xa;
+    cout << "ya = ";
+    cin >> ya;
+    cout << "xb = ";
+    cin >> xb;
+    cout << "yb = ";
+    cin >> yb;
 
     
 
     glLineWidth(2);
-
     glBegin(GL_LINES);
-
     glVertex3f(xa,ya,0.0f);
-
     glVertex3f(xb,yb,0.0f);
-
     glEnd();
-
-    
 
     float m=(yb-ya)/(xb-xa);
 
-    
-
     float x, y;
 
-    
+    int choice;
 
-    //glBegin(GL_POINTS);
+    cout << "\n1. L->R\n";
+    cout << "2. R->L\n";
+    cout << "CHOICE = ";
+    cin >> choice;
 
-    
-
-    int choice=1;
-
-    
 
     if(m>0 && m<=1)
 
     {
-
         if(choice==1)
 
         {
-
             x=xa;
-
             y=ya;
 
-            
-
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
-
-            
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             while(x!=round(xb) && y!=round(yb))
 
             {
 
                 x=x+1;
-
                 y=y+m;
 
-                
 
-                glRasterPos2f(x,y+0.5);
+                plotPointString(x,round(y),1);
+                plotPoint(x,round(y));
 
-                
-
-                std::string string;
-
-                
-
-                string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-                
-
-                char *s=const_cast<char*>(string.c_str());
-
-                
-
-                for (char* c = s; *c != '\0'; c++)
-
-                        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
-
-                
-
-                glBegin(GL_POINTS);
-
-                glVertex2f(x,round(y));
-
-                glEnd();
 
             }
 
@@ -233,56 +171,21 @@ void DDA()
         {
 
             x=xb;
-
             y=yb;
 
-            
-
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
-
-            
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             while(x!=round(xa) && y!=round(ya))
 
             {
 
                 x=x-1;
-
                 y=y-m;
 
-                
+                plotPoint(x,round(y));
+                plotPointString(x,round(y),1);
 
-                glBegin(GL_POINTS);
-
-                glVertex2f(x,round(y));
-
-                glEnd();
 
             }
 
@@ -297,41 +200,12 @@ void DDA()
         if(choice==1)
 
         {
-
             x=xa;
-
             y=ya;
 
-            
 
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
-
+            plotPoint(x,y);
+            plotPointString(x,y,1);
             
 
             while(x!=round(xb) && y!=round(yb))
@@ -339,16 +213,10 @@ void DDA()
             {
 
                 x=x+(1/m);
-
                 y=y+1;
 
-                
-
-                glBegin(GL_POINTS);
-
-                glVertex2f(round(x),y);
-
-                glEnd();
+                plotPointString(round(x),y,1);
+                plotPoint(round(x),y);
 
             }
 
@@ -359,57 +227,21 @@ void DDA()
         {
 
             x=xb;
-
             y=yb;
 
-            
 
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
-
-            
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             while(x!=round(xa) && y!=round(ya))
 
             {
 
                 x=x-(1/m);
-
                 y=y-1;
 
-                
-
-                glBegin(GL_POINTS);
-
-                glVertex2f(round(x),y);
-
-                glEnd();
-
+                plotPointString(round(x),y,1);
+                plotPoint(round(x),y);
             }
 
         }
@@ -425,40 +257,12 @@ void DDA()
         {
 
             x=xa;
-
             y=ya;
 
-            
 
-            glBegin(GL_POINTS);
 
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
-
-            
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             while(x!=round(xb) && y!=round(yb))
 
@@ -468,13 +272,9 @@ void DDA()
 
                 y=y-abs(m);
 
-                
+                plotPointString(x,round(y),1);
+                plotPoint(x,round(y));
 
-                glBegin(GL_POINTS);
-
-                glVertex2f(x,round(y));
-
-                glEnd();
 
             }
 
@@ -485,38 +285,11 @@ void DDA()
         {
 
             x=xb;
-
             y=yb;
 
-            
-
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
+   
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             
 
@@ -528,13 +301,8 @@ void DDA()
 
                 y=y+abs(m);
 
-                
-
-                glBegin(GL_POINTS);
-
-                glVertex2f(x,round(y));
-
-                glEnd();
+                plotPointString(x,round(y),1);
+                plotPoint(x,round(y));
 
             }
 
@@ -551,38 +319,12 @@ void DDA()
         {
 
             x=xa;
-
             y=ya;
 
             
 
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             
 
@@ -591,16 +333,10 @@ void DDA()
             {
 
                 x=x+abs((1/m));
-
                 y=y-1;
 
-                
-
-                glBegin(GL_POINTS);
-
-                glVertex2f(round(x),y);
-
-                glEnd();
+                plotPointString(round(x),y,1);
+                plotPoint(round(x),y);
 
             }
 
@@ -611,38 +347,11 @@ void DDA()
         {
 
             x=xb;
-
             y=yb;
 
-            
 
-            glBegin(GL_POINTS);
-
-            glVertex2f(x,y);
-
-            glEnd();
-
-            
-
-            glRasterPos2f(x,y+1);
-
-            
-
-            std::string string;
-
-            
-
-            string="("+std::to_string(int(round(x)))+","+std::to_string(int(round(y)))+")";
-
-            
-
-            char *s=const_cast<char*>(string.c_str());
-
-            
-
-            for (char* c = s; *c != '\0'; c++)
-
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10 , *c);
+            plotPoint(x,y);
+            plotPointString(x,y,1);
 
             
 
@@ -651,26 +360,17 @@ void DDA()
             {
 
                 x=x-abs((1/m));
-
                 y=y+1;
 
-                
-
-                glBegin(GL_POINTS);
-
-                glVertex2f(round(x),y);
-
-                glEnd();
-
+                plotPointString(round(x),y,1);
+                plotPoint(round(x),y);
             }
 
         }
 
     }
 
-    
 
-    //glEnd();
 
     glFlush();
 
@@ -692,7 +392,7 @@ int main(int argc,char* argv[])
 
     glutInitWindowSize(640,480);
 
-    glutCreateWindow("First Exercise");
+    glutCreateWindow("Second Exercise");
 
     glutDisplayFunc(DDA);
 
@@ -703,4 +403,3 @@ int main(int argc,char* argv[])
     return 1;
 
 }
-
